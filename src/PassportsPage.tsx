@@ -20,8 +20,7 @@ const PassportsPage: FC = () => {
         const loadPassports = async () => {
             try {
                 const result = await getAllPassports(passportName);
-                let temp = passportName === '' ? Object.values(result)[0] : Object.values(result)[1];
-                setPassports(temp as unknown as Passport[]);
+                setPassports(result);
             } catch (error) {
                 console.error("Ошибка при загрузке объектов:", error);
             }

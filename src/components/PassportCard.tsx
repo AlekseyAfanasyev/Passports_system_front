@@ -31,7 +31,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
         <Card className='card'>
             <Card.Title> <span className="passport-label">{passportName}</span> </Card.Title>
             <div className="image-container">
-                <Card.Img className="card_image" src={`data:image/png;base64, ${imageUrl}`} />
+                <Card.Img className="card_image" src={`${imageUrl}`} />
             </div>
             <Card.Body>
                 <div className='card_title'>
