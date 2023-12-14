@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { changePassportStatus } from '../modules/change-passport-status';
 
 interface Props {
@@ -13,25 +14,34 @@ interface Props {
 
 const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passportDetailed, onStatusChange }) => {
     const [isStatusChanging, setIsStatusChanging] = useState(false);
+    const navigate = useNavigate();
 
-    const handleStatusChange = () => {
-        setIsStatusChanging(true); //рендер 1 => return (...)
-        changePassportStatus(passportName)
-            .then(() => {
-                setIsStatusChanging(false); //рендер 2 (если успех) => return (...)
-                onStatusChange(passportName, !passportStatus);
-            })
-            .catch((error) => {
-                console.error('Ошибка при изменении статуса орбиты:', error);
-                setIsStatusChanging(false); //рендер 2 (если не успех) => return (...)
-            });
+    const handleStatusChange = async () => {
+        setIsStatusChanging(true);
+
+        try {
+            await changePassportStatus(passportName);
+            onStatusChange(passportName, !passportStatus);
+        } catch (error) {
+            console.error('Error changing passport status:', error);
+        } finally {
+            setIsStatusChanging(false);
+            navigate('/passports');
+        }
     };
 
     return (
         <Card className='card'>
             <Card.Title> <span className="passport-label">{passportName}</span> </Card.Title>
             <div className="image-container">
-                <Card.Img className="card_image" src={`${imageUrl}`} />
+            <Card.Img
+                    className="card_image"
+                    src={imageUrl}
+                    onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                        (e.target as HTMLImageElement).src = '/public/DEFAULT.jpg';
+                    }}
+                    alt={`DEFAULT.jpg`}
+                />
             </div>
             <Card.Body>
                 <div className='card_title'>
@@ -44,7 +54,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
                     onClick={handleStatusChange}
                     disabled={isStatusChanging}
                 >
-                    {isStatusChanging ? 'Изменение...' : 'Изменить статус'}
+                    {isStatusChanging ? 'Удаление...' : 'Удалить'}
                 </Button>
             </Card.Body>
         </Card>

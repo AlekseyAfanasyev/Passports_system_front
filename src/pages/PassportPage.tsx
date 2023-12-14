@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react'
 import './styles/style.css'
 import { useParams } from 'react-router-dom';
-import { getPassportByName } from './modules/get-passport-by-name'
-import { Passport } from './modules/ds'
-import NavigationMain from './components/NavigationMain';
-import Breadcrumbs from './components/Breadcrumbs';
+import { getPassportByName } from '../modules/get-passport-by-name'
+import { Passport } from '../modules/ds'
+import NavigationMain from '../components/NavigationMain';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 
 const PassportPage: FC = () => {
@@ -31,7 +31,7 @@ const PassportPage: FC = () => {
             <div className="card-sub">
           
                 <div className="card-content-sub">
-                    <img src={`data:image/png;base64, ${passport?.Image}`} className="card_image" alt="картинка" />
+                    <img src={` ${passport?.Image}`} className="card_image" alt="картинка" />
                     <div className="right-content-sub">
                         <p><span className="passport-label">Статус:</span> {passport?.IsFree ? 'Доступен' : 'Недоступен'}</p>
                         <p><span className="passport-label">Серия:</span> {passport?.Seria}</p>

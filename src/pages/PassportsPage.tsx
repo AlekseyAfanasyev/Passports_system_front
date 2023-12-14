@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import './styles/style.css';
-import { Passport } from './modules/ds';
-import { getAllPassports } from './modules/get-all-passports';
-import PassportCard from './components/PassportCard';
-import NavigationMain from './components/NavigationMain';
-import Breadcrumbs from './components/Breadcrumbs';
+import { Passport } from '../modules/ds';
+import { getAllPassports } from '../modules/get-all-passports';
+import PassportCard from '../components/PassportCard';
+import NavigationMain from '../components/NavigationMain';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 
 const PassportsPage: FC = () => {
