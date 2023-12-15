@@ -1,0 +1,107 @@
+/* TransfReqDetPage.styles.css */
+
+body {
+    background-color: #f0f0f0;
+    font-family: "Century Gothic", sans-serif;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.common-button {
+    width: 150px; /* Adjust the width as needed */
+  }
+
+.card {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgb(0, 18, 70);
+}
+
+.list-group {
+    width: 500px;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-select {
+    border: 2px solid #0E3E8DFF;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-select:focus {
+    border-color: #001246;
+}
+
+.input-group {
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    padding: 10px;
+    border: 2px solid #0E3E8DFF;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #001246;
+}
+
+.button-group {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.button {
+    background-color: #0E3E8DFF;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-family: "Century Gothic", sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    width: 150px;
+}
+
+.button:hover {
+    background-color: #001246;
+}
+
+.margin-bottom {
+    margin-bottom: 20px;
+}

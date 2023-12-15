@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
 import { Row, Col } from 'react-bootstrap'
 
-import BorderCrossFactReqCard from '../components//BorderCrossFactReqCard/BorderCrossFactReqCard'
+import BorderCrossFactReqCard from '../components/BorderCrossFactReqCard/BorderCrossFactReqCard'
 import store from '../store/store'
 import { getTransfReqs } from '../modules/get-all-requests'
 import { BorderCrossingFactRequest } from '../modules/ds'
@@ -45,8 +45,10 @@ const BorderCrossFact: FC = () => {
                 {bordercrfactReqs.map((item, index) => (
                     <Col key={index}> 
                         <BorderCrossFactReqCard {...{
+                            id: item.ID,
                             status: item.Status,
                             dateCreated: item.DateCreated,
+                            dateProcessed: item.DateProcessed,
                             dateFinished: item.DateFinished,
                         }}></BorderCrossFactReqCard>
                     </Col>

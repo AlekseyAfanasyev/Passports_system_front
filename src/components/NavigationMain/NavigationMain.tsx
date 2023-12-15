@@ -67,6 +67,17 @@ const NavigationMain: FC = () => {
                                     Заявки
                                 </NavDropdown.Item>
                             )}
+                            {userRole == '1' &&
+                                <NavDropdown.Item
+                                    className="navbar-block"
+                                    onClick={() => {
+                                        navigate('/cart');
+                                        setShowDropdown(false);
+                                    }}
+                                >
+                                    Корзина
+                                </NavDropdown.Item>
+                            }
                             <NavDropdown.Item
                                 className="navbar-block"
                                 onClick={() => {

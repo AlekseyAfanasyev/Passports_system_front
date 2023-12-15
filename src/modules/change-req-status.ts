@@ -8,6 +8,7 @@ export const changeReqStatus = async (userToken = '', request: BorderCrossingFac
         'Authorization': 'Bearer ' + userToken,
       },
     }
+    console.log("changeReqStatus: ", request)
     return axios.put(
       '/api/border_crossing_facts/change_status',
       {

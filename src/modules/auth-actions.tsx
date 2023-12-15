@@ -69,11 +69,11 @@ export const loginUser = createAsyncThunk(
   export const logoutUser = createAsyncThunk(
     '/auth/logout',
     async(userToken: string, {rejectWithValue}) => {
-      localStorage.setItem('userToken', '')
-      localStorage.setItem('userName', '')
-      localStorage.setItem('userRole', '0')
-      localStorage.setItem('passports', '')
       try {
+        localStorage.setItem('userToken', '')
+        localStorage.setItem('userName', '')
+        localStorage.setItem('userRole', '0')
+        localStorage.setItem('passports', '')
         const config = {
           headers: {
             'Content-Type': 'application/json',

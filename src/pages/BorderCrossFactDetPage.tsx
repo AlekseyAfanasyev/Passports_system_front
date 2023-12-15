@@ -1,30 +1,34 @@
-import { FC, useEffect, useState, useRef } from "react";
+import React, { FC, useEffect, useState, useRef } from "react";
 import { useSelector } from 'react-redux';
-import { Form, FormControl, FormGroup, Button, FormSelect, 
-    ListGroup, ListGroupItem, FormLabel } from "react-bootstrap";
+import { Form, FormGroup, Button, ListGroup, ListGroupItem, Modal } from "react-bootstrap";
+import Select from 'react-select';
 import { getDetailedReq } from '../modules/get-detailed-request';
-import {  BorderCrossingFactRequest, Passport } from "../modules/ds";
-import store from '../store/store';
 import { getRequestPassports } from "../modules/get-request-passports";
 import { setRequestPassports } from "../modules/set-request-passports";
 import { changeReqStatus } from "../modules/change-req-status";
+import { BorderCrossingFactRequest } from "../modules/ds";
+import store, { useAppDispatch } from '../store/store';
+import { Passport } from '../modules/ds';
+import { getAllPassports } from "../modules/get-all-passports";
+import "../styles/BorderCrossFactDetPage.styles.css";
+import cartSlice from "../store/cartSlice";
 
-interface InputChangeInterface {
-    target: HTMLInputElement;
-  }
 
 const BorderCrossFactDetPage: FC = () => {
 
-    const newPassportInputRef = useRef<any>(null)
-
-    const [passportNames, setPassportNames] = useState<string[]>()
-    const [newPassport, setNewPassport] = useState('')
-    const statusRef = useRef<any>(null)
-
-    const { userToken } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
-
+    const newPassportInputRef = useRef<any>(null);
+    const dispatch = useAppDispatch()
+    const [passportNames, setPassportNames] = useState<string[]>();
+    const [newPassport, setNewPassport] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const { userToken, userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
+    
     const [reqId, setReqId] = useState(0);
     const [req, setReq] = useState<BorderCrossingFactRequest | undefined>();
+
+    const [options, setOptions] = useState<Passport[]>([]);
+    const [selectedPassport, setSelectedPassport] = useState<Passport | null>(null);
 
     useEffect(() => {
         const pathname = window.location.pathname;
@@ -43,123 +47,199 @@ const BorderCrossFactDetPage: FC = () => {
                 console.error("Ошибка загрузки заявки:", error);
             }
             if (userToken === null) {
-                return
+                return;
             }
 
-            const passports = await getRequestPassports(+reqIdString, userToken)
-            var passportNames: string[] = []
-            for (let passport of passports) {
-                passportNames.push(passport.Name)
+            const passports = await getRequestPassports(+reqIdString, userToken);
+            var passportNames: string[] = [];
+            if (passports) {
+                for (let orbit of passports) {
+                    passportNames.push(orbit.Name);
+                }
+                setPassportNames(passportNames);
+                localStorage.setItem("passports", passportNames.join(","));
             }
-            setPassportNames(passportNames)
-
-        }
+        };
+        const fetchPassports = async () => {
+            const orbits = await getAllPassports();
+            setOptions(orbits);
+        };
 
         loadReq();
+        fetchPassports();
     }, [userToken]);
 
     const removePassport = (removedPassportName: string) => {
         return (event: React.MouseEvent) => {
             if (!passportNames) {
-                return
+                return;
             }
 
-            setPassportNames(passportNames.filter(function(passportName) {
-                return passportName !== removedPassportName
-            }))
+            dispatch(cartSlice.actions.removePassport(removedPassportName))
+            setPassportNames(passportNames.filter(function (passportName) {
+                return passportName !== removedPassportName;
+            }));
 
-            event.preventDefault()
-        }
-    }
+            event.preventDefault();
+        };
+    };
 
     const addPassport = () => {
-        if (!passportNames || !newPassport) {
-            return
+        if (!selectedPassport || !selectedPassport.Name || !passportNames) {
+            return;
         }
 
-        setPassportNames(passportNames.concat([newPassport]))
-        setNewPassport('')
+        const passportNameToAdd = selectedPassport.Name;
+
+        if (passportNames.includes(passportNameToAdd)) {
+            console.error('Паспорт уже добавлен:', passportNameToAdd);
+            return;
+        }
+
+        dispatch(cartSlice.actions.addPassport(passportNameToAdd))
+        setPassportNames([...passportNames, passportNameToAdd]);
+
+        setNewPassport('');
 
         if (newPassportInputRef.current != null) {
-            newPassportInputRef.current.value = ""
+            newPassportInputRef.current.value = '';
         }
     }
 
-    const handleNewPassportChange = (event: InputChangeInterface) => {
-        setNewPassport(event.target.value)
-    }
+    const handleErrorClose = () => {
+        setShowError(false);
+    };
 
-    const sendChanges = async() => {
+    const handleSuccessClose = () => {
+        setShowSuccess(false);
+        if (req?.Status != 'Черновик') {
+            window.location.href = '/passports';
+        }
+    };
+
+    const sendChanges = async (status: string) => {
         if (!userToken) {
             return;
         }
 
-        var req_id = 0
-        var status = ''
+        var req_id = 0;
+        
 
         if (req?.ID !== undefined) {
-            req_id = req?.ID
-        }
-        if (statusRef.current != null) {
-            status = statusRef.current.value
+            req_id = req?.ID;
         }
 
         const editResult = await changeReqStatus(userToken, {
             ID: req_id,
             Status: status,
-        })
-        console.log(editResult)
+        });
+        console.log(editResult);
 
 
         if (!passportNames || !userToken) {
             return;
         }
-        const regionsResult = await setRequestPassports(req?.ID, passportNames, userToken)
-        console.log(regionsResult)
-
-    }
-
-    return(
-        <>
-        <h1>Редактирование заявки #{reqId}</h1>
-        <h4>Паспорта:</h4>
-        <ListGroup style={{width: '500px'}}>
-            {passportNames?.map((passportName, passportID) => (
-                <ListGroupItem key={passportID}> {passportName}
-                    <span className="pull-right button-group" style={{float: 'right'}}>
-                        <Button variant="danger" onClick={removePassport(passportName)}>Удалить</Button>
-                    </span>
-                </ListGroupItem>
-            ))
+        if (status !== 'Удалена') {
+            const passportsResult = await setRequestPassports(req?.ID, passportNames, userToken);
+            if (passportsResult.status === 201) {
+                setShowSuccess(true);
+            } else {
+                setShowError(true);
             }
-        </ListGroup>
-        <span>
-            <input ref={newPassportInputRef} onChange={handleNewPassportChange}></input>
-            <Button onClick={addPassport}>Добавить</Button>
-        </span>
-        <h4>Характеристики:</h4>
-        <Form>
-            <FormGroup>
-                <label htmlFor="statusInput">Статус</label>
-                <FormSelect id="statusInput" defaultValue={req?.Status} ref={statusRef}>
-                    <option>Черновик</option>
-                    <option>Удалена</option>
-                    <option>На рассмотрении</option>
-                    <option>Завершена</option>
-                    <option>Отклонена</option>
-                </FormSelect>
-            </FormGroup>
-        
-        </Form>
-        <Button onClick={sendChanges}> Сохранить изменения</Button>
-        <p></p>
-        <Button href='/border_crossing_facts'>К заявкам</Button>
-        <p></p>
-        <Button href='/passports'>К паспортам</Button>
-        <p></p>
-        </>
-    )
+            console.log(passportsResult);
+            if (status != 'Черновик'){
+                localStorage.setItem("passports", '')
+                window.location.href = '/passports';
+            }
+        } else {
+            localStorage.setItem("passports", '')
+            setPassportNames([]);
+        }
+    };
 
-}
+    return (
+        <div className="container">
+            <Modal show={showError} onHide={handleErrorClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Произошла ошибка, заявка не была обновлена</Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleErrorClose}>
+                        Закрыть
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showSuccess} onHide={handleSuccessClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Обновление заявки прошло успешно!</Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                    <Button variant="success" onClick={handleSuccessClose}>
+                        Закрыть
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <h1>Заявка #{req?.ID}</h1>
+            <p>Статус: {req?.Status}</p>
+            <h4>Орбиты:</h4>
+            <ListGroup className="list-group" style={{ width: '500px' }}>
+                {passportNames?.map((passportName, passportID) => (
+                    <ListGroupItem key={passportID} className="list-group-item">
+                        {passportName}
+                        {req?.Status === 'Черновик' && (
+                            <span className="button-group">
+                                <Button variant="danger" onClick={removePassport(passportName)}>Удалить</Button>
+                            </span>
+                        )}
+                    </ListGroupItem>
+                ))}
+            </ListGroup>
+            {req?.Status === 'Черновик' && (
+                <div className="input-group">
+                    <Select
+                        options={options.map(option => ({ value: option.Name, label: option.Name }))}
+                        value={selectedPassport ? { value: selectedPassport.Name, label: selectedPassport.Name } : null}
+                        onChange={(value) => setSelectedPassport(options.find(option => option.Name === value?.value) || null)}
+                        isSearchable
+                        placeholder="Выберите паспорт..."
+                    />
+                    <Button onClick={addPassport} className="button">Добавить</Button>
+                </div>
+            )}
+            <Form>
+                {req?.Status === 'Черновик' && (
+                    <Button onClick={() => sendChanges('Черновик')} className="button">Сохранить изменения</Button>
+                )}
+                <FormGroup className="form-group">
+                    {userRole === '1' && req?.Status === 'Черновик' && (
+                        <>
+                            <div>
+                                <Button className="common-button" variant="primary" onClick={() => sendChanges('На рассмотрении')}>Сформировать</Button>
+                            </div>
+                            <div>
+                                <Button className="common-button" variant="danger" onClick={() => sendChanges('Удалена')}>Удалить</Button>
+                            </div>
+                        </>
+                    )}
+
+                    {userRole === '2' && req?.Status === 'На рассмотрении' && (
+                        <>
+                            <div>
+                                <Button className="common-button" variant="warning" onClick={() => sendChanges('Отклонена')}>Отклонить</Button>
+                            </div>
+                            <div>
+                                <Button className="common-button" variant="success" onClick={() => sendChanges('Оказана')}>Одобрить</Button>
+                            </div>
+                        </>
+                    )}
+                </FormGroup>
+            </Form>
+            <div className="button-container">
+                <Button href='/border_crossing_passports' className="button">К заявкам</Button>
+                <Button href='/passports' className="button">К орбитам</Button>
+            </div>
+        </div>
+    );
+};
 
 export default BorderCrossFactDetPage;

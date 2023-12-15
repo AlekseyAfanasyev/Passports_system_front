@@ -13,7 +13,7 @@ import AuthPage from './pages/AuthPage';
 import Profile from './pages/ProfilePage';
 import BorderCrossFact from './pages/BorderCrossFactPage';
 import BorderCrossFactDetPage from './pages/BorderCrossFactDetPage';
-import BorderCrossPaspPage from './pages/BorderCrossPaspPage';
+import Cart from './pages/CartPage';
 
 import store from './store/store';
 import { Provider } from 'react-redux';
@@ -30,7 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/passports/:passport_name" Component={PassportPage} />
           <Route path="/border_crossing_requests" Component={BorderCrossFact} />
           <Route path="/border_crossing_requests/:req_id" Component={BorderCrossFactDetPage} />
-          <Route path="/border_crossing_passports" Component={BorderCrossPaspPage} />
+          <Route path="/cart" Component={Cart} />
           <Route path="/auth" Component={AuthPage} />
           <Route path="/profile" Component={Profile} />
         </Routes>

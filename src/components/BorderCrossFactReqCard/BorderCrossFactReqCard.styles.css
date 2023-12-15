@@ -1,0 +1,66 @@
+.card {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgb(0, 18, 70);
+  }
+
+  .card_body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card_footer {
+    display: flex;
+    flex-direction: column; /* Change to column layout */
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  /* Status specific styles */
+  .card_status {
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+  }
+
+  /* Button styles */
+  .button {
+    margin: 5px 0; /* Add margin to buttons */
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-family: "Century Gothic", sans-serif;
+    font-size: 16px;
+  }
+
+  .button_primary {
+    background-color: #0E3E8DFF;
+    color: white;
+  }
+
+  .button_primary:hover {
+    background-color: #001246;
+  }
+
+  .button_danger {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .button_danger:hover {
+    background-color: #bb2d3b;
+  }
+
+  .button_info {
+    background-color: #17a2b8;
+    color: white;
+  }
+
+  .button_info:hover {
+    background-color: #117a8b;
+  }
