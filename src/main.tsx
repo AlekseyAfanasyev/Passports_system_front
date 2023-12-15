@@ -28,8 +28,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/passports" Component={PassportsPage} />
           <Route path="/passports/:passport_name" Component={PassportPage} />
-          <Route path="/border_crossing_requests" Component={BorderCrossFact} />
-          <Route path="/border_crossing_requests/:req_id" Component={BorderCrossFactDetPage} />
+          <Route path="/border_crossing_facts" Component={BorderCrossFact} />
+          <Route path="/border_crossing_facts/:req_id" Component={BorderCrossFactDetPage} />
           <Route path="/cart" Component={Cart} />
           <Route path="/auth" Component={AuthPage} />
           <Route path="/profile" Component={Profile} />

@@ -42,7 +42,7 @@ const Cart: FC = () => {
                 setShowSuccess(true);
                 setTimeout(() => {
                     setShowSuccess(false);
-                    navigate(`/border_crossing_fact/${reqID}`);
+                    navigate(`/border_crossing_facts/${reqID}`);
                 }, 3000);
             } else {
                 setShowError(true);
@@ -59,7 +59,7 @@ const Cart: FC = () => {
     }
     const handleSuccessClose = () => {
         setShowSuccess(false)
-        //window.location.href = `/border_crossing_fact/${}`;
+        //window.location.href = `/border_crossing_facts/${}`;
     }
 
     return (

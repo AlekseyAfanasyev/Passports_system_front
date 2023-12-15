@@ -235,7 +235,7 @@ const BorderCrossFactDetPage: FC = () => {
                 </FormGroup>
             </Form>
             <div className="button-container">
-                <Button href='/border_crossing_passports' className="button">К заявкам</Button>
+                <Button href='/border_crossing_facts' className="button">К заявкам</Button>
                 <Button href='/passports' className="button">К орбитам</Button>
             </div>
         </div>

@@ -51,7 +51,7 @@ const borderCrossFactCard: FC<borderCrossFactProps> = ({ status, dateCreated, da
             {userRole === '1' && status === 'Черновик' && (
               <div>
                 <Button
-                  onClick={() => (window.location.href = `/border_crossing_passports/${id}`)}
+                  onClick={() => (window.location.href = `/border_crossing_facts/${id}`)}
                   variant="primary"
                   className="button button_primary"
                 >
@@ -65,7 +65,7 @@ const borderCrossFactCard: FC<borderCrossFactProps> = ({ status, dateCreated, da
             )}
             {userRole === '1' && status !== 'Черновик' && (
               <Button
-                onClick={() => (window.location.href = `/border_crossing_passports/${id}`)}
+                onClick={() => (window.location.href = `/border_crossing_facts/${id}`)}
                 variant="info"
                 className="button button_info"
               >
@@ -74,7 +74,7 @@ const borderCrossFactCard: FC<borderCrossFactProps> = ({ status, dateCreated, da
             )}
             {userRole === '2' && (
               <Button
-                onClick={() => (window.location.href = `/border_crossing_passports/${id}`)}
+                onClick={() => (window.location.href = `/border_crossing_facts/${id}`)}
                 variant="primary"
                 className="button button_primary"
               >

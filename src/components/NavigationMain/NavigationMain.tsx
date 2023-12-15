@@ -60,7 +60,7 @@ const NavigationMain: FC = () => {
                                 <NavDropdown.Item
                                     className="navbar-block"
                                     onClick={() => {
-                                        navigate('/transfer_requests');
+                                        navigate('/border_crossing_facts');
                                         setShowDropdown(false);
                                     }}
                                 >
