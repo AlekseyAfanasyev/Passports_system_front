@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux'
-import { Col, Row, Modal, Button } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import '../styles/style.css';
 import { Passport } from '../modules/ds';
 import { getAllPassports } from '../modules/get-all-passports';

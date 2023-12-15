@@ -5,14 +5,19 @@ import store from '../../store/store'
 
 interface borderCrossFactProps {
     status: string,
-    dateCreated: string,
-    dateFinished: string,
+    dateCreated?: string,
+    dateFinished?: string,
 }
 
-const borderCrossFactCard: FC<borderCrossFactProps> = ({ status, dateCreated, dateFinished}) => {
-    const {userRole, userName} = useSelector((state: ReturnType<typeof store.getState>) => state.auth)
+const borderCrossFactCard: FC<borderCrossFactProps> = ({ status, dateCreated, dateFinished }) => {
+    const { userRole, userName } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
 
-    const formatDate = (dateString: string) => {
+    const formatDate = (dateString: string | undefined) => {
+        if (!dateString) {
+            return 'N/A';
+        }
+
+    
         const options: Intl.DateTimeFormatOptions = {
           timeZone: 'UTC',
           year: 'numeric',
@@ -32,26 +37,26 @@ const borderCrossFactCard: FC<borderCrossFactProps> = ({ status, dateCreated, da
             <Card.Body>
                 <p> Статус: {status} </p>
                 <p> Создана: {formatDate(dateCreated)}</p>
-                {dateFinished !== null &&
+                {dateFinished !== undefined &&
                     <p> Завршена: {formatDate(dateFinished)} </p>
                 }
             </Card.Body>
             <Card.Footer>
-                {userRole == '1' && status=='Черновик' &&
-                    <button>Изменить</button>
+                {userRole === '1' && status === 'Черновик' &&
+                    <>
+                        <Button variant="primary">Изменить</Button>{' '}
+                        <Button variant="danger">Отменить</Button>
+                    </>
                 }
-                {userRole == '1' && status=='Черновик' &&
-                    <button>Отменить</button>
+                 {userRole === '1' && status !== 'Черновик' &&
+                    <Button variant="info">Просмотр</Button>
                 }
-                {userRole == '1' && status!=='Черновик' &&
-                    <button>Просмотр</button>
-                }
-                {(userRole == '2') &&
-                    <button>Изменить</button>
+                {userRole === '2' &&
+                    <Button variant="primary">Изменить</Button>
                 }
             </Card.Footer>
         </Card>
-    )
+    );
 }
 
 export default borderCrossFactCard;

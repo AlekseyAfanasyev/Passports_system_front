@@ -17,10 +17,10 @@ const BorderCrossFact: FC = () => {
             if (userToken !== undefined) {
                 const result = (await getTransfReqs(userToken?.toString(), '')).filter((item) => {
                     if (userRole === '1') {
-                        return item.Client.Name === userName;
+                        return item.Client?.Name === userName;
                     } else {
                         console.log(userName)
-                        return item.Moder.Name === userName;
+                        return item.Moder?.Name === userName;
                     }
                   });
                   setBordercrfactReqs(result)

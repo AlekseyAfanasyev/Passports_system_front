@@ -16,7 +16,7 @@ const NavigationMain: FC = () => {
     const handleLogout = () => {
         if (userToken) {
             dispatch(logoutUser(userToken));
-            navigate('/orbits/');
+            navigate('/passports/');
         }
     };
     return (
@@ -32,7 +32,7 @@ const NavigationMain: FC = () => {
                     </Nav.Link>
                 </Nav>
                 <Nav>
-                {!userToken && (
+                    {!userToken && (
                         <Nav.Link className="navbar-block" href="/auth">
                             Вход
                         </Nav.Link>

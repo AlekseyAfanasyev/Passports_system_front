@@ -25,7 +25,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
     const { userRole, userToken } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
 
     const handleAddOrbitToCart = () => {
-        dispatch(cartSlice.actions.addOrbit(passportName))
+        dispatch(cartSlice.actions.addPassport(passportName))
     }
 
     const handleStatusChange = async () => {

@@ -1,19 +1,21 @@
 import axios from "axios";
+import { BorderCrossingFactRequest } from './ds'
 
-export const createRequest = async(passports: string[], userToken: string): Promise<string> => {
+export const changeReqStatus = async (userToken = '', request: BorderCrossingFactRequest): Promise<string> => {
     const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + userToken,
-        },
-      }
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + userToken,
+      },
+    }
     return axios.put(
-        '/api/border_crossing_facts/change_status',
-        {
+      '/api/border_crossing_facts/change_status',
+      {
+        reqID: request.ID,
+        status: request.Status,
+      },
+      config
 
-        },
-        config
-
-    )
+    )    
     .then((response) => response.data);
 }
