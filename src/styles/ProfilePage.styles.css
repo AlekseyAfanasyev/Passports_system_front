@@ -1,0 +1,33 @@
+/* ProfilePage.styles.css */
+
+.profile-container {
+    background-color: #f0f0f0;
+    font-family: "Century Gothic", sans-serif;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.button {
+    background-color: #0E3E8DFF;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-family: "Century Gothic", sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #001246;
+}

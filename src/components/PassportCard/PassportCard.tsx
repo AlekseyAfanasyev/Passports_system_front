@@ -1,7 +1,11 @@
 import { FC, useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { changePassportStatus } from '../modules/change-passport-status';
+import { useSelector } from 'react-redux';
+import { changePassportStatus } from '../../modules/change-passport-status';
+import "./PassportCard.styles.css"
+import store from '../../store/store'
+
 
 interface Props {
     imageUrl: string;
@@ -15,6 +19,8 @@ interface Props {
 const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passportDetailed, onStatusChange }) => {
     const [isStatusChanging, setIsStatusChanging] = useState(false);
     const navigate = useNavigate();
+
+    const { userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth)
 
     const handleStatusChange = async () => {
         setIsStatusChanging(true);
@@ -38,9 +44,9 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
                     className="card_image"
                     src={imageUrl}
                     onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                        (e.target as HTMLImageElement).src = '/public/DEFAULT.jpg';
+                        (e.target as HTMLImageElement).src = '/DEFAULT.jpg';
                     }}
-                    alt={`DEFAULT.jpg`}
+                    alt={`/DEFAULT.jpg`}
                 />
             </div>
             <Card.Body>
@@ -49,6 +55,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
                 </div>
                 <Button className='button' href={passportDetailed}> Подробнее </Button>
                 <div></div>
+                {userRole =='2' && (
                 <Button
                     className='button'
                     onClick={handleStatusChange}
@@ -56,6 +63,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
                 >
                     {isStatusChanging ? 'Удаление...' : 'Удалить'}
                 </Button>
+            )}
             </Card.Body>
         </Card>
     );

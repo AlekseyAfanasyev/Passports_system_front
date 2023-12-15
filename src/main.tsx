@@ -1,0 +1,36 @@
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter} from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider} from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Breadcrumbs from './components/Breadcrumbs/Breadcrumbs';
+import NavigationMain from './components/NavigationMain/NavigationMain';
+import PassportsPage from './pages/PassportsPage'
+import PassportPage from './pages/PassportPage'
+
+import AuthPage from './pages/AuthPage';
+import ProfilePage from './pages/ProfilePage';
+import BorderCrossFactPage from './pages/BorderCrossFactPage';
+
+import store from './store/store';
+import { Provider } from 'react-redux';
+
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+     <Provider store={store}>
+      <BrowserRouter>
+        <NavigationMain />
+        <Breadcrumbs />
+        <Routes>
+          <Route path="/passports" Component={PassportsPage} />
+          <Route path="/passports/:passport_name" Component={PassportPage} />
+          <Route path="/border_crossing_requests" Component={BorderCrossFactPage} />
+          <Route path="/auth" Component={AuthPage} />
+          <Route path="/profile" Component={ProfilePage} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>,
+)

@@ -1,0 +1,80 @@
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 64px;
+    background-color: #001246;
+    color: #ffffff;
+    padding: 0 20px;
+}
+
+.navbar-wrapper {
+    max-width: 1240px;
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-blocks {
+    display: flex;
+    gap: 50px;
+    margin: 0 auto;
+}
+
+.navbar-logo,
+.navbar-block,
+.navbar-profile {
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+}
+
+.navbar-block::before, 
+.navbar-profile::before, 
+.navbar-logo::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    transform: scaleX(0);
+    transform-origin: bottom left;
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-block:hover::before, 
+.navbar-profile:hover::before, 
+.navbar-logo:hover::before {
+    transform: scaleX(1);
+}
+
+.navbar-block:hover,
+.navbar-profile:hover,
+.navbar-logo:hover {
+    color: inherit;
+}
+
+.nav-dropdown .nav-link,
+.nav-dropdown:hover .nav-link {
+    color: #fff;
+}
+
+.navbar-dropdown {
+    position: absolute;
+}
+
+.nav-dropdown .navbar-block {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-dropdown:hover .navbar-block {
+    color: #000;
+}

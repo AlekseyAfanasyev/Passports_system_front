@@ -1,15 +1,19 @@
 import {Passport} from './ds'
+import axios from 'axios';
 
 export const getPassportByName = async  (passportName = ''): Promise<Passport> => {
-    return fetch('/api/passports/' + String(passportName),{
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    })
-    .then((response) => response.json())
-    .catch(() => ({
+    try {
+        const response = await axios.get(`/api/passports/${encodeURIComponent(passportName)}`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при получении паспортов:', error);
+        return {
         "ID": 1,
         "Name": "Нет информации",
         "IsFree": false,
@@ -20,5 +24,7 @@ export const getPassportByName = async  (passportName = ''): Promise<Passport> =
         "Birthdate": "Нет информации",
         "BDplace": "Нет информации",
         "Image": "./DEFAULT.jpg"
-    }));
+    };
 }
+};
+

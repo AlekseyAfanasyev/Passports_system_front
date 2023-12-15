@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import './SearchForm.styles.css';
 
 interface SearchFormProps {
     searchText: string;

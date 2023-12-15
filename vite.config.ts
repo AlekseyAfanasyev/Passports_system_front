@@ -16,6 +16,6 @@ export default defineConfig({
        }
       }
   },
-  base: "passports",
+  //base: "passports",
   plugins: [react()],
 })

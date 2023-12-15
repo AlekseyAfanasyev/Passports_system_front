@@ -1,10 +1,9 @@
-import React, { FC, useEffect, useState } from 'react';
-import './styles/style.css';
+import { FC, useEffect, useState } from 'react';
+import '../styles/style.css';
 import { Passport } from '../modules/ds';
 import { getAllPassports } from '../modules/get-all-passports';
-import PassportCard from '../components/PassportCard';
-import NavigationMain from '../components/NavigationMain';
-import Breadcrumbs from '../components/Breadcrumbs';
+import PassportCard from '../components/PassportCard/PassportCard';
+import SearchForm from '../components/SearchForm/SearchForm';
 
 
 const PassportsPage: FC = () => {
@@ -35,30 +34,19 @@ const PassportsPage: FC = () => {
                 passport.Name === passportName ? { ...passport, IsFree: newStatus } : passport
             )
         );
+        setPassports((passports) => passports.filter((passport) => passport.Name !== passportName));
     };
 
-    const handleSearchSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        window.location.href = `/passports?passport_name=${searchText}`;
-    };
 
     return (
         <div>
-            <NavigationMain/>
-            <Breadcrumbs/>
-            <div className="search-form">
-                <form onSubmit={handleSearchSubmit}>
-                    <input
-                        type="text"
-                        id="passport_search"
-                        name="passport_name"
-                        placeholder="Введите название"
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
-                    />
-                    <input type="submit" className="button" value="Поиск"/>
-                </form>
-            </div>
+            <SearchForm
+        searchText={searchText}
+        onSearchTextChange={setSearchText}
+        onSearchSubmit={(searchText) => {
+            window.location.href = `/passports?passport_name=${searchText}`;
+          }}
+      />
             <div className="card_group">
                 {passports.map((passport, index) => (
                     <PassportCard

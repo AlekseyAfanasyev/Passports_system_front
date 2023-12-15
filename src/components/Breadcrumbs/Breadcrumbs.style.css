@@ -1,0 +1,26 @@
+/* Breadcrumbs Styles */
+.breadcrumbs {
+    font-family: "Century Gothic", sans-serif;
+    font-size: 20px;
+    max-width: 1200px;
+    margin-top: 80px;
+    margin-left: 20px;
+}
+
+.breadcrumbs > *{
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.breadcrumbs .crumb::after{
+    content: '/';
+    margin-left: 10px;
+}
+
+.breadcrumbs .crumb:last-child::after{
+    display: none;
+}
+
+.breadcrumbs .crumb a{
+    color: #000000;
+}
