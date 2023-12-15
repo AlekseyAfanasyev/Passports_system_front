@@ -10,8 +10,10 @@ import PassportsPage from './pages/PassportsPage'
 import PassportPage from './pages/PassportPage'
 
 import AuthPage from './pages/AuthPage';
-import ProfilePage from './pages/ProfilePage';
-import BorderCrossFactPage from './pages/BorderCrossFactPage';
+import Profile from './pages/ProfilePage';
+import BorderCrossFact from './pages/BorderCrossFactPage';
+import BorderCrossFactDetPage from './pages/BorderCrossFactDetPage';
+import BorderCrossPaspPage from './pages/BorderCrossPaspPage';
 
 import store from './store/store';
 import { Provider } from 'react-redux';
@@ -26,9 +28,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/passports" Component={PassportsPage} />
           <Route path="/passports/:passport_name" Component={PassportPage} />
-          <Route path="/border_crossing_requests" Component={BorderCrossFactPage} />
+          <Route path="/border_crossing_requests" Component={BorderCrossFact} />
+          <Route path="/border_crossing_requests/:req_id" Component={BorderCrossFactDetPage} />
+          <Route path="/border_crossing_passports" Component={BorderCrossPaspPage} />
           <Route path="/auth" Component={AuthPage} />
-          <Route path="/profile" Component={ProfilePage} />
+          <Route path="/profile" Component={Profile} />
         </Routes>
       </BrowserRouter>
     </Provider>

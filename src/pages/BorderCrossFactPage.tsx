@@ -7,7 +7,7 @@ import store from '../store/store'
 import { getTransfReqs } from '../modules/get-all-requests'
 import { BorderCrossingFactRequest } from '../modules/ds'
 
-const BorderCrossFactPage: FC = () => {
+const BorderCrossFact: FC = () => {
     const {userToken, userRole, userName} = useSelector((state: ReturnType<typeof store.getState>) => state.auth)
 
     const [bordercrfactReqs, setBordercrfactReqs] = useState<BorderCrossingFactRequest[]>([])
@@ -56,4 +56,4 @@ const BorderCrossFactPage: FC = () => {
     )
 }
 
-export default BorderCrossFactPage
+export default BorderCrossFact

@@ -72,6 +72,7 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem('userToken', '')
       localStorage.setItem('userName', '')
       localStorage.setItem('userRole', '0')
+      localStorage.setItem('passports', '')
       try {
         const config = {
           headers: {

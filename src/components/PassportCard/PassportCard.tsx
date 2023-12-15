@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { changePassportStatus } from '../../modules/change-passport-status';
 import "./PassportCard.styles.css"
-import store from '../../store/store'
+import cartSlice from '../../store/cartSlice'
+import store, { useAppDispatch } from '../../store/store'
 
 
 interface Props {
@@ -19,14 +20,19 @@ interface Props {
 const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passportDetailed, onStatusChange }) => {
     const [isStatusChanging, setIsStatusChanging] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useAppDispatch()
 
-    const { userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth)
+    const { userRole, userToken } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
+
+    const handleAddOrbitToCart = () => {
+        dispatch(cartSlice.actions.addOrbit(passportName))
+    }
 
     const handleStatusChange = async () => {
         setIsStatusChanging(true);
 
         try {
-            await changePassportStatus(passportName);
+            await changePassportStatus(userToken?.toString(),passportName);
             onStatusChange(passportName, !passportStatus);
         } catch (error) {
             console.error('Error changing passport status:', error);
@@ -64,6 +70,9 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
                     {isStatusChanging ? 'Удаление...' : 'Удалить'}
                 </Button>
             )}
+            {userRole =='1' && (
+                <Button className='button' onClick={handleAddOrbitToCart}> Добавить</Button>
+                )}
             </Card.Body>
         </Card>
     );

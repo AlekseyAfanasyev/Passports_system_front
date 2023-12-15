@@ -24,9 +24,9 @@ const NavigationMain: FC = () => {
             <Navbar.Brand className="navbar-logo" href="/passports">
                 PASSPORT SYSTEM
             </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="navbar-blocks mr-auto">
+            <Navbar.Toggle aria-controls="navbar-nav" />
+            <Navbar.Collapse id="navbar-nav">
+                <Nav className="mr-auto">
                 <Nav.Link className="navbar-block" href="/passports">
                         Список паспортов
                     </Nav.Link>
@@ -83,5 +83,4 @@ const NavigationMain: FC = () => {
         </Navbar>
     );
 };
-
 export default NavigationMain;

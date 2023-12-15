@@ -9,7 +9,8 @@ const endpointToLabel: EndpointToLabelMap = {
   'passports': 'Паспорта',
   'profile': 'Личный кабинет',
   'auth': 'Вход',
-  'border_crossing_facts': 'Заявки'
+  'border_crossing_facts': 'Заявки',
+  'border_crossing_passports' : 'Оформление заявки'
 };
 
 

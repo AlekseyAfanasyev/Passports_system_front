@@ -5,7 +5,7 @@ import store, { useAppDispatch } from '../store/store';
 import { logoutUser } from '../modules/auth-actions';
 import '../styles/ProfilePage.styles.css';
 
-const ProfilePage: FC = () => {
+const Profile: FC = () => {
     const { userToken, userName } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
     const isUserPresent = userToken !== undefined && userToken !== '';
 
@@ -35,4 +35,4 @@ const ProfilePage: FC = () => {
     );
 }
 
-export default ProfilePage;
+export default Profile;

@@ -8,6 +8,8 @@
     background-color: #001246;
     color: #ffffff;
     padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .navbar-wrapper {
@@ -18,11 +20,6 @@
     align-items: center;
 }
 
-.navbar-blocks {
-    display: flex;
-    gap: 50px;
-    margin: 0 auto;
-}
 
 .navbar-logo,
 .navbar-block,
@@ -64,17 +61,27 @@
     color: #fff;
 }
 
-.navbar-dropdown {
-    position: absolute;
+.navbar-toggler {
+    margin-right: 0;
+    border: none;
+    background-color: transparent !important;
 }
 
-.nav-dropdown .navbar-block {
-    display: block;
-    padding: 10px 20px;
-    text-decoration: none;
-    transition: color 0.3s;
+.navbar-toggler-icon {
+    background-color: #fff;
 }
 
-.nav-dropdown:hover .navbar-block {
-    color: #000;
+.navbar-collapse {
+    width: auto;
+    max-width: 100%;
+    flex-grow: 1;
+    text-align: right;
+    background-color: #001246;
+    background-size: cover;
+}
+
+.navbar-nav {
+    display: flex;
+    position: relative;
+    flex-direction: column;
 }

@@ -14,6 +14,7 @@ const borderCrossFactCard: FC<borderCrossFactProps> = ({ status, dateCreated, da
 
     const formatDate = (dateString: string) => {
         const options: Intl.DateTimeFormatOptions = {
+          timeZone: 'UTC',
           year: 'numeric',
           month: '2-digit',
           day: '2-digit',
@@ -23,7 +24,7 @@ const borderCrossFactCard: FC<borderCrossFactProps> = ({ status, dateCreated, da
         };
 
         const date = new Date(dateString);
-        return new Intl.DateTimeFormat('en-US', options).format(date);
+        return new Intl.DateTimeFormat('ru-RU', options).format(date);
       };
 
     return (

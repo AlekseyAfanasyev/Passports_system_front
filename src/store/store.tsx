@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import authReducer from './authSlice'
+import cartSlice from './cartSlice'
 
 const store = configureStore({
     reducer: {
-        auth: authReducer
+        auth: authReducer,
+        cart: cartSlice.reducer
     }
 })
 

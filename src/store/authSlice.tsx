@@ -49,7 +49,7 @@ const authSlice = createSlice({
         [loginUser.fulfilled.toString()]: (state, {payload}) => {
             state.loading = false
             state.success = true
-            state.userToken = payload.acces_token
+            state.userToken = payload.access_token
             state.userName = payload.login
         },
         [loginUser.rejected.toString()]: (state, {payload}) => {
