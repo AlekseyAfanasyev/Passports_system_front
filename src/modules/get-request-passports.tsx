@@ -10,7 +10,7 @@ export const getRequestPassports = async(request_id = 0, userToken = ''): Promis
         },
     }
     return axios.get(
-        '/api/request_to_passport/' +  String(request_id),
+        '/api/border_crossing_passport/' +  String(request_id),
         config)
         .then((response) => {
             const {data} = response

@@ -8,7 +8,7 @@ export const createRequest = async(passports: string[], userToken: string): Prom
         },
       }
     return axios.put(
-        '/api/transfer_requests/create',
+        '/api/border_crossing_fact/create',
         {
           'passports': passports,
         },
