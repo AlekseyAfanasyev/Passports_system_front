@@ -61,8 +61,8 @@ const BorderCrossFactDetPage: FC = () => {
             }
         };
         const fetchPassports = async () => {
-            const orbits = await getAllPassports();
-            setOptions(orbits);
+            const passports = await getAllPassports();
+            setOptions(passports);
         };
 
         loadReq();
@@ -181,7 +181,7 @@ const BorderCrossFactDetPage: FC = () => {
             </Modal>
             <h1>Заявка #{req?.ID}</h1>
             <p>Статус: {req?.Status}</p>
-            <h4>Орбиты:</h4>
+            <h4>Паспорта:</h4>
             <ListGroup className="list-group" style={{ width: '500px' }}>
                 {passportNames?.map((passportName, passportID) => (
                     <ListGroupItem key={passportID} className="list-group-item">
@@ -236,7 +236,7 @@ const BorderCrossFactDetPage: FC = () => {
             </Form>
             <div className="button-container">
                 <Button href='/border_crossing_facts' className="button">К заявкам</Button>
-                <Button href='/passports' className="button">К орбитам</Button>
+                <Button href='/passports' className="button">К паспортам</Button>
             </div>
         </div>
     );

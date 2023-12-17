@@ -18,7 +18,7 @@ p {
 }
 
 .button {
-    background-color: #0E3E8DFF;
+    background-color: rgb(235, 12, 12);
     color: white;
     padding: 10px 20px;
     text-decoration: none;

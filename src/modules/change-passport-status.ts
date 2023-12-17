@@ -11,7 +11,7 @@ export const changePassportStatus = async (userToken = '', passport_name: string
 
   if (response.status === 200) {
   } else {
-      throw new Error('Ошибка при изменении статуса орбиты');
+      throw new Error('Ошибка при изменении статуса паспорта');
   }
   } catch (error) {
     throw new Error('Ошибка при изменении статуса паспорта');

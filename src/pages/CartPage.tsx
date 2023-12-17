@@ -103,7 +103,7 @@ const Cart: FC = () => {
             {passports?.length !== 0 &&
                 <button onClick={addOrbit}>Оформить</button>
             }
-            <button onClick={() => navigate("/orbits")}>К паспортам</button>
+            <button onClick={() => navigate("/passports")}>К паспортам</button>
         </div>
     )
 
