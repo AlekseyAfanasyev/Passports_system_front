@@ -8,12 +8,15 @@ import store, { useAppDispatch } from '../store/store';
 import cartSlice from '../store/cartSlice';
 import PassportCard from '../components/PassportCard/PassportCard';
 import SearchForm from '../components/SearchForm/SearchForm';
+import { getTransfReqs } from '../modules/get-all-requests';
+import { getRequestPassports } from '../modules/get-request-passports'
 
 
 const PassportsPage: FC = () => {
     const [passports, setPassports] = useState<Passport[]>([]);
     const [searchText, setSearchText] = useState<string>('');
     const dispatch = useAppDispatch()
+    const { userToken, userRole, userName } = useSelector((state: ReturnType<typeof store.getState>) => state.auth)
 
     const { added } = useSelector((state: ReturnType<typeof store.getState>) => state.cart)
 
@@ -22,6 +25,30 @@ const PassportsPage: FC = () => {
         const urlParams = new URLSearchParams(queryString);
         var passportName = urlParams.get('passport_name') || '';
         setSearchText(passportName);
+
+        const loadTransfReqs = async () => {
+            if (userToken !== undefined && userToken !== '') {
+              const result = (await getTransfReqs(userToken?.toString(), 'Черновик')).filter((item) => {
+                if (userRole === '1') {
+                  return item.Client?.Name === userName;
+                } else {
+                  return [];
+                }
+              });
+              console.log(result)
+              if (result[0].ID) {
+                const passports = await getRequestPassports(result[0].ID, userToken?.toString());
+                var passportNames: string[] = [];
+                if (passports) {
+                  for (let passport of passports) {
+                    passportNames.push(passport.Name);
+                  }
+                  localStorage.setItem("passports", passportNames.join(","));
+                }
+              }
+            }
+          }
+          loadTransfReqs()
 
         const loadPassports = async () => {
             try {
@@ -44,7 +71,7 @@ const PassportsPage: FC = () => {
         setPassports((passports) => passports.filter((passport) => passport.Name !== passportName));
     };
 
-    const handleModalClose= () => {
+    const handleModalClose = () => {
         dispatch(cartSlice.actions.disableAdded())
     }
 
@@ -56,7 +83,7 @@ const PassportsPage: FC = () => {
           <Modal.Title>Паспорт добавлен в заявку</Modal.Title>
         </Modal.Header>
         <Modal.Footer>
-          <button onClick={() => { dispatch(cartSlice.actions.disableAdded()) }}>
+          <button onClick ={() => { dispatch(cartSlice.actions.disableAdded()) }}>
             Закрыть
           </button>
         </Modal.Footer>

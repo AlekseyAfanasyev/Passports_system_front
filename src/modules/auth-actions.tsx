@@ -52,6 +52,7 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem('userName', data.login)
       localStorage.setItem('userToken', data.access_token)
       localStorage.setItem('userRole', data.role)
+      localStorage.setItem("requestStatus", '')
       return data
     } catch (error) {
       if (!axios.isAxiosError(error)) {
@@ -74,6 +75,8 @@ export const loginUser = createAsyncThunk(
         localStorage.setItem('userName', '')
         localStorage.setItem('userRole', '0')
         localStorage.setItem('passports', '')
+        localStorage.setItem("requestStatus", '')
+        
         const config = {
           headers: {
             'Content-Type': 'application/json',

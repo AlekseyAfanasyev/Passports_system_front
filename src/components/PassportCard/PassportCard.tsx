@@ -20,13 +20,15 @@ interface Props {
 const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passportDetailed, onStatusChange }) => {
     const [isStatusChanging, setIsStatusChanging] = useState(false);
     const navigate = useNavigate();
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
     const { userRole, userToken } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
 
-    const handleAddOrbitToCart = () => {
-        dispatch(cartSlice.actions.addPassport(passportName))
+    const handleAddPassportToCart = () => {
+        dispatch(cartSlice.actions.addPassport(passportName));
     }
+
+    const isPassportInCart = localStorage.getItem('passports')?.split(',').includes(passportName);
 
     const handleStatusChange = async () => {
         setIsStatusChanging(true);
@@ -61,17 +63,23 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
                 </div>
                 <Button className='button' href={passportDetailed}> Подробнее </Button>
                 <div></div>
-                {userRole =='2' && (
-                <Button
-                    className='button'
-                    onClick={handleStatusChange}
-                    disabled={isStatusChanging}
-                >
-                    {isStatusChanging ? 'Удаление...' : 'Удалить'}
-                </Button>
+                {userRole === '2' && (
+                    <Button
+                        className='button'
+                        onClick={handleStatusChange}
+                        disabled={isStatusChanging}
+                    >
+                        {isStatusChanging ? 'Удаление...' : 'Удалить'}
+                    </Button>
             )}
-            {userRole =='1' && (
-                <Button className='button' onClick={handleAddOrbitToCart}> Добавить</Button>
+            {userRole === '1' && (
+                    <Button
+                        className='button'
+                        onClick={handleAddPassportToCart}
+                        disabled={isPassportInCart}
+                    >
+                        {isPassportInCart ? 'Добавлено' : 'Добавить'}
+                    </Button>
                 )}
             </Card.Body>
         </Card>

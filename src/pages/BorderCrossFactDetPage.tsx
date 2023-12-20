@@ -12,6 +12,7 @@ import { Passport } from '../modules/ds';
 import { getAllPassports } from "../modules/get-all-passports";
 import "../styles/BorderCrossFactDetPage.styles.css";
 import cartSlice from "../store/cartSlice";
+import { AxiosError } from 'axios';
 
 
 const BorderCrossFactDetPage: FC = () => {
@@ -29,6 +30,7 @@ const BorderCrossFactDetPage: FC = () => {
 
     const [options, setOptions] = useState<Passport[]>([]);
     const [selectedPassport, setSelectedPassport] = useState<Passport | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const pathname = window.location.pathname;
@@ -42,9 +44,14 @@ const BorderCrossFactDetPage: FC = () => {
         const loadReq = async () => {
             try {
                 const loadedReq = await getDetailedReq(userToken?.toString(), String(reqIdString));
+                setError(null);
                 setReq(loadedReq);
             } catch (error) {
-                console.error("Ошибка загрузки заявки:", error);
+                if ((error as AxiosError).message === '403') {
+                    setError("403 Доступ запрещен");
+                } else {
+                    setError("500 Ошибка загрузки заявки");
+                }
             }
             if (userToken === null) {
                 return;
@@ -53,11 +60,13 @@ const BorderCrossFactDetPage: FC = () => {
             const passports = await getRequestPassports(+reqIdString, userToken);
             var passportNames: string[] = [];
             if (passports) {
-                for (let orbit of passports) {
-                    passportNames.push(orbit.Name);
+                for (let passport of passports) {
+                    passportNames.push(passport.Name);
                 }
                 setPassportNames(passportNames);
-                localStorage.setItem("passports", passportNames.join(","));
+                if (req?.Status == 'Черновик'){
+                    localStorage.setItem("passports", passportNames.join(","));
+                }
             }
         };
         const fetchPassports = async () => {
@@ -68,6 +77,14 @@ const BorderCrossFactDetPage: FC = () => {
         loadReq();
         fetchPassports();
     }, [userToken]);
+
+    if (error) {
+        return (
+          <div style={{ textAlign: 'center', fontSize: '2em', margin: 'auto' }}>
+            {error}
+          </div>
+        );
+      }
 
     const removePassport = (removedPassportName: string) => {
         return (event: React.MouseEvent) => {
@@ -214,10 +231,12 @@ const BorderCrossFactDetPage: FC = () => {
                     {userRole === '1' && req?.Status === 'Черновик' && (
                         <>
                             <div>
-                                <Button className="common-button" variant="primary" onClick={() => sendChanges('На рассмотрении')}>Сформировать</Button>
+                                <Button className="common-button" variant="primary" 
+                                onClick={() => sendChanges('На рассмотрении')}>Сформировать</Button>
                             </div>
                             <div>
-                                <Button className="common-button" variant="danger" onClick={() => sendChanges('Удалена')}>Удалить</Button>
+                                <Button className="common-button" variant="danger" 
+                                onClick={() => sendChanges('Удалена')}>Отменить</Button>
                             </div>
                         </>
                     )}
@@ -225,10 +244,12 @@ const BorderCrossFactDetPage: FC = () => {
                     {userRole === '2' && req?.Status === 'На рассмотрении' && (
                         <>
                             <div>
-                                <Button className="common-button" variant="warning" onClick={() => sendChanges('Отклонена')}>Отклонить</Button>
+                                <Button className="common-button" variant="warning" 
+                                onClick={() => sendChanges('Отклонена')}>Отклонить</Button>
                             </div>
                             <div>
-                                <Button className="common-button" variant="success" onClick={() => sendChanges('Оказана')}>Одобрить</Button>
+                                <Button className="common-button" variant="success" 
+                                onClick={() => sendChanges('Оказана')}>Одобрить</Button>
                             </div>
                         </>
                     )}

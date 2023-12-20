@@ -53,7 +53,8 @@ const AuthPage: FC = () => {
 
     useEffect(() => {
         if (success) {
-            navigate('/profile');
+          navigate('/passports');
+          window.location.reload()
           }
     }, [navigate, userInfo, success])
 

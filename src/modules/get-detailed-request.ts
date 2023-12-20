@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+
 import { BorderCrossingFactRequest } from './ds';
 
 export const getDetailedReq = async (userToken = '', req_id = ''): Promise<BorderCrossingFactRequest> => {
@@ -16,7 +17,11 @@ export const getDetailedReq = async (userToken = '', req_id = ''): Promise<Borde
         console.log(data);
         return data;
     } catch (error) {
-        console.error("Ошибка при выполени запроса:", error);
-        throw error;
+        if ((error as AxiosError).response && (error as AxiosError).response?.status === 403) {
+            throw new Error('403');
+        } else {
+            console.error("Ошибка при выполени запроса:", error);
+            throw error;
+        }
     }
 };

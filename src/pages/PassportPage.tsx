@@ -3,30 +3,58 @@ import '../styles/style.css'
 import { useParams } from 'react-router-dom';
 import { getPassportByName } from '../modules/get-passport-by-name'
 import { Passport } from '../modules/ds'
+import { AxiosError } from 'axios';
 
 
 const PassportPage: FC = () => {
-    const [passport, setPassport] = useState<Passport>()
-
+    const [passport, setPassport] = useState<Passport | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    
     const { passport_name } = useParams();
 
     useEffect(() => {
-        console.log("passport_name: ", passport_name)
 
-        const loadOrbit = async () => {
-            const result = await getPassportByName(String(passport_name))
-            setPassport(result)
-        }
+        const loadPassport = async () => {
+            try {
+                const result = await getPassportByName(String(passport_name));
+                setPassport(result);
+                setError(null);
+              } catch (error) {
+                console.error('Ошибка при получении орбит:', error);
+                if ((error as AxiosError).message === '404') {
+                  setError("404 Орбита не найдена");
+                } else {
+                  setError('Произошла ошибка при загрузке орбиты');
+                }
+              }
+            };
 
-        loadOrbit()
+        loadPassport();
     }, [passport_name]);
+
+    if (error) {
+        return (
+          <div style={{ textAlign: 'center', fontSize: '2em', margin: 'auto' }}>
+            {error}
+          </div>
+        );
+      }
+    
+      if (!passport) {
+        return <div>Загрузка...</div>;
+      }
 
     return (
         <div>
             <div className="card-sub">
-          
                 <div className="card-content-sub">
-                    <img src={passport?.Image || '/DEFAULT.jpg'} className="card_image" />
+                <img
+                    src={passport?.Image || '/DEFAULT.jpg'}
+                    className="card_image"
+                    onError={(e) => {
+                    e.currentTarget.src = '/DEFAULT.jpg';
+                    }}
+                    />
                     <div className="right-content-sub">
                         <p><span className="passport-label">Статус:</span> {passport?.IsFree ? 'Доступен' : 'Недоступен'}</p>
                         <p><span className="passport-label">Серия:</span> {passport?.Seria}</p>
@@ -40,7 +68,7 @@ const PassportPage: FC = () => {
                 <a className="button-det" href="../passports">Назад</a>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default PassportPage

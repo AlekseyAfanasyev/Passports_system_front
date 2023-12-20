@@ -28,7 +28,7 @@ const Cart: FC = () => {
         }
     }
 
-    const addOrbit = async () => {
+    const addPassport = async () => {
         if (passports === undefined || userToken === null) {
             return;
         }
@@ -43,7 +43,7 @@ const Cart: FC = () => {
                 setTimeout(() => {
                     setShowSuccess(false);
                     navigate(`/border_crossing_facts/${reqID}`);
-                }, 3000);
+                }, 2000);
             } else {
                 setShowError(true);
             }
@@ -101,7 +101,7 @@ const Cart: FC = () => {
                 }
             </ListGroup>
             {passports?.length !== 0 &&
-                <button onClick={addOrbit}>Оформить</button>
+                <button onClick={addPassport}>Оформить</button>
             }
             <button onClick={() => navigate("/passports")}>К паспортам</button>
         </div>

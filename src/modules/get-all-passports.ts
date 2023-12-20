@@ -6,9 +6,9 @@ export const getAllPassports = async (passportName = '') : Promise<Passport[]> =
         const response = await axios.get(`/api/passports?passport_name=${encodeURIComponent(passportName)}`);
         return response.data;
       } catch (error) {
-        console.error('Error fetching passports:', error);
+        console.error('Ошибка при получении паспортов:', error);
         return [{
-            "ID": 1,
+            "ID": 0,
             "Name": "Нет информации",
             "IsFree": false,
             "Seria":"Нет информации",
