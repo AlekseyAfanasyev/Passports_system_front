@@ -1,9 +1,14 @@
 import { Passport } from './ds';
 import axios from 'axios';
 
-export const getAllPassports = async (passportName = '') : Promise<Passport[]> => {
+export const getAllPassports = async (passportName = '', passportIsGender = '') : Promise<Passport[]> => {
     try {
-        const response = await axios.get(`/api/passports?passport_name=${encodeURIComponent(passportName)}`);
+        const queryParams = new URLSearchParams({
+          passport_name: passportName,
+          passport_gender: passportIsGender,
+        });
+
+        const response = await axios.get(`/api/passports?${queryParams.toString()}`);
         return response.data;
       } catch (error) {
         console.error('Ошибка при получении паспортов:', error);

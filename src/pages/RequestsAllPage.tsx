@@ -6,7 +6,7 @@ import BorderCrossFactReqCard from '../components/BorderCrossFactReqCard/BorderC
 import store, { useAppDispatch } from '../store/store'
 import { getTransfReqs } from '../modules/get-all-requests'
 import { BorderCrossingFactRequest } from '../modules/ds'
-import filtersSlice from "../store/filtersSlice";
+import filtersSlice from '../store/filtersSlice';
 import RequestFilter from '../components/RequestFilter/RequestFilter';
 
 const TransfReq: FC = () => {

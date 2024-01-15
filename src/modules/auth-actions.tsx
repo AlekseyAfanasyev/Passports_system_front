@@ -53,6 +53,8 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem('userToken', data.access_token)
       localStorage.setItem('userRole', data.role)
       localStorage.setItem("requestStatus", '')
+      localStorage.setItem("passportName", '')
+      localStorage.setItem("passportGender", '')
       return data
     } catch (error) {
       if (!axios.isAxiosError(error)) {
@@ -76,6 +78,8 @@ export const loginUser = createAsyncThunk(
         localStorage.setItem('userRole', '0')
         localStorage.setItem('passports', '')
         localStorage.setItem("requestStatus", '')
+        localStorage.setItem("passportName", '')
+        localStorage.setItem("passportGender", '')
         
         const config = {
           headers: {
@@ -89,7 +93,7 @@ export const loginUser = createAsyncThunk(
           config
         )
 
-
+        window.location.reload()
         return data;
       } catch (error) {
         if (!axios.isAxiosError(error)) {

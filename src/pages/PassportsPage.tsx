@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux'
-import { Modal } from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap'
 import '../styles/style.css';
 import { Passport } from '../modules/ds';
 import { getAllPassports } from '../modules/get-all-passports';
@@ -10,21 +10,28 @@ import PassportCard from '../components/PassportCard/PassportCard';
 import SearchForm from '../components/SearchForm/SearchForm';
 import { getTransfReqs } from '../modules/get-all-requests';
 import { getRequestPassports } from '../modules/get-request-passports'
+import { useNavigate } from 'react-router-dom';
+import filtersSlice from "../store/filtersSlice";
+import PassportFilter from '../components/PassportFilter/PassportFilter';
 
 
 const PassportsPage: FC = () => {
     const [passports, setPassports] = useState<Passport[]>([]);
     const [searchText, setSearchText] = useState<string>('');
     const dispatch = useAppDispatch()
+    const navigate= useNavigate()
     const { userToken, userRole, userName } = useSelector((state: ReturnType<typeof store.getState>) => state.auth)
 
     const { added } = useSelector((state: ReturnType<typeof store.getState>) => state.cart)
 
+    const { passportName } = useSelector((state: ReturnType<typeof store.getState>) => state.filters);
+    const [name, setName] = useState(passportName);
+
+    const { passportIsGender } = useSelector((state: ReturnType<typeof store.getState>) => state.filters);
+    const [isGender, setIsGender] = useState(passportIsGender);
+
+
     useEffect(() => {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        var passportName = urlParams.get('passport_name') || '';
-        setSearchText(passportName);
 
         const loadTransfReqs = async () => {
             if (userToken !== undefined && userToken !== '') {
@@ -52,7 +59,7 @@ const PassportsPage: FC = () => {
 
         const loadPassports = async () => {
             try {
-                const result = await getAllPassports(passportName);
+                const result = await getAllPassports(name?.toString(), isGender?.toString());
                 setPassports(result);
             } catch (error) {
                 console.error("Ошибка при загрузке объектов:", error);
@@ -61,6 +68,36 @@ const PassportsPage: FC = () => {
 
         loadPassports();
     }, []);
+
+    const applyFilters = async () => {
+      try {
+        const data = await getAllPassports(name?.toString(), isGender?.toString());
+        dispatch(filtersSlice.actions.setPassportName(name));
+        dispatch(filtersSlice.actions.setPassportIsGender(isGender));
+  
+        setPassports(data);
+  
+        navigate('/passports', { state: { data } });
+      } catch (error) {
+        console.error("Ошибка при получении паспортов:", error);
+      }
+    };
+  
+    const clearFilters = async () => {
+      setName('');
+      setIsGender('');
+  
+      dispatch(filtersSlice.actions.setPassportName(''));
+      dispatch(filtersSlice.actions.setPassportIsGender(''));
+  
+      try {
+        const data = await getAllPassports();
+        setPassports(data);
+      } catch (error) {
+        console.error("Error loading all passports:", error);
+      }
+  
+    };
 
     const handleStatusChange = (passportName: string, newStatus: boolean) => {
         setPassports((passports) =>
@@ -78,6 +115,8 @@ const PassportsPage: FC = () => {
 
     return (
         <div>
+          {userToken && userRole === '2' && <Button 
+      onClick={() => (navigate(`/passports/add_new_passport`))} className='cart-button'> Новый паспорт </Button>}
             <Modal show = {added} onHide={handleModalClose}>
         <Modal.Header closeButton>
           <Modal.Title>Паспорт добавлен в заявку</Modal.Title>
@@ -88,12 +127,13 @@ const PassportsPage: FC = () => {
           </button>
         </Modal.Footer>
       </Modal>
-            <SearchForm
-        searchText={searchText}
-        onSearchTextChange={setSearchText}
-        onSearchSubmit={(searchText) => {
-            window.location.href = `/passports?passport_name=${searchText}`;
-          }}
+      <PassportFilter
+        name={name}
+        isGender={isGender}
+        setName={setName}
+        setIsGender={setIsGender}
+        applyFilters={applyFilters}
+        clearFilters={clearFilters}
       />
             <div className="card_group">
                 {passports.map((passport, index) => (

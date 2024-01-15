@@ -8,6 +8,7 @@ import Breadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 import NavigationMain from './components/NavigationMain/NavigationMain';
 import PassportsPage from './pages/PassportsPage'
 import PassportPage from './pages/PassportPage'
+import PassportForm from './components/PassportForm/PassportForm';
 
 import AuthPage from './pages/AuthPage';
 import Profile from './pages/ProfilePage';
@@ -20,7 +21,6 @@ import { Provider } from 'react-redux';
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
      <Provider store={store}>
       <BrowserRouter>
         <NavigationMain />
@@ -30,11 +30,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/passports/:passport_name" Component={PassportPage} />
           <Route path="/border_crossing_facts" Component={BorderCrossFact} />
           <Route path="/border_crossing_facts/:req_id" Component={BorderCrossFactDetPage} />
+          <Route path="/passports/:passport_name/edit" element={<PassportForm />} />
+          <Route path="/passports/add_new_passport" element={<PassportForm />} />
           <Route path="/cart" Component={Cart} />
           <Route path="/auth" Component={AuthPage} />
           <Route path="/profile" Component={Profile} />
         </Routes>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>,
 )

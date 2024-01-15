@@ -4,11 +4,18 @@ import { useParams } from 'react-router-dom';
 import { getPassportByName } from '../modules/get-passport-by-name'
 import { Passport } from '../modules/ds'
 import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import store from '../store/store';
+import { Row, Col, Button } from 'react-bootstrap';
 
 
 const PassportPage: FC = () => {
     const [passport, setPassport] = useState<Passport | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate()
+    const { userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth)
+
     
     const { passport_name } = useParams();
 
@@ -65,7 +72,14 @@ const PassportPage: FC = () => {
                         <p><span className="passport-label">Место рождения:</span> {passport?.BDplace}</p>
                     </div>
                 </div>
-                <a className="button-det" href="../passports">Назад</a>
+                <button className="button-det" onClick={() => (navigate(`/passports/`))}>Назад</button>
+                {userRole == '2' && (<>
+                <Col>
+                {/* <button onClick={() => navigate(`/passports/${passport?.}/edit`)} className="button-det">
+                        Изменить
+                    </button> */}
+                </Col>
+        </>)}
             </div>
         </div>
     );
