@@ -14,9 +14,10 @@ export const getDetailedReq = async (userToken = '', req_id = ''): Promise<Borde
     try {
         const response = await axios.get(`/api/border_crossing_facts/${encodeURIComponent(req_id)}`, config);
         const { data } = response;
-        console.log(data);
+        
         return data;
     } catch (error) {
+        console.log(error)
         if ((error as AxiosError).response && (error as AxiosError).response?.status === 403) {
             throw new Error('403');
         } else {

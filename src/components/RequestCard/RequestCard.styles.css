@@ -1,0 +1,43 @@
+.card {
+    /* Styles for the overall card */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 16px;
+    padding: 16px;
+  }
+  
+  .card_body {
+    /* Styles for the card body */
+    font-size: 16px;
+  }
+  
+  .card_footer {
+    /* Styles for the card footer */
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .button {
+    /* Common styles for buttons */
+    margin-right: 8px;
+    cursor: pointer;
+  }
+  
+  .button_primary {
+    /* Styles for primary buttons */
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .button_danger {
+    /* Styles for danger buttons */
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  .button_info {
+    /* Styles for info buttons */
+    background-color: #17a2b8;
+    color: #fff;
+  }

@@ -17,10 +17,8 @@ import { AxiosError } from 'axios';
 
 const BorderCrossFactDetPage: FC = () => {
 
-    const newPassportInputRef = useRef<any>(null);
-    const dispatch = useAppDispatch()
     const [passportNames, setPassportNames] = useState<string[]>();
-    const [newPassport, setNewPassport] = useState('');
+    const [passports, setPassports] = useState<Passport[]>();
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
     const { userToken, userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
@@ -29,18 +27,16 @@ const BorderCrossFactDetPage: FC = () => {
     const [req, setReq] = useState<BorderCrossingFactRequest | undefined>();
 
     const [options, setOptions] = useState<Passport[]>([]);
-    const [selectedPassport, setSelectedPassport] = useState<Passport | null>(null);
+    
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const pathname = window.location.pathname;
         const parts = pathname.split('/');
         const reqIdString = parts[parts.length - 1];
-
         if (reqIdString) {
             setReqId(+reqIdString);
         }
-
         const loadReq = async () => {
             try {
                 const loadedReq = await getDetailedReq(userToken?.toString(), String(reqIdString));
@@ -63,8 +59,9 @@ const BorderCrossFactDetPage: FC = () => {
                 for (let passport of passports) {
                     passportNames.push(passport.Name);
                 }
-                setPassportNames(passportNames);
-                if (req?.Status == 'Черновик'){
+                
+                setPassportNames(passportNames)
+                if (req?.Status == 'Черновик') {
                     localStorage.setItem("passports", passportNames.join(","));
                 }
             }
@@ -80,78 +77,36 @@ const BorderCrossFactDetPage: FC = () => {
 
     if (error) {
         return (
-          <div style={{ textAlign: 'center', fontSize: '2em', margin: 'auto' }}>
+            <div style={{ textAlign: 'center', fontSize: '2em', margin: 'auto' }}>
             {error}
-          </div>
+        </div>
         );
       }
 
-    const removePassport = (removedPassportName: string) => {
-        return (event: React.MouseEvent) => {
-            if (!passportNames) {
-                return;
-            }
-
-            dispatch(cartSlice.actions.removePassport(removedPassportName))
-            setPassportNames(passportNames.filter(function (passportName) {
-                return passportName !== removedPassportName;
-            }));
-
-            event.preventDefault();
-        };
-    };
-
-    const addPassport = () => {
-        if (!selectedPassport || !selectedPassport.Name || !passportNames) {
-            return;
-        }
-
-        const passportNameToAdd = selectedPassport.Name;
-
-        if (passportNames.includes(passportNameToAdd)) {
-            console.error('Паспорт уже добавлен:', passportNameToAdd);
-            return;
-        }
-
-        dispatch(cartSlice.actions.addPassport(passportNameToAdd))
-        setPassportNames([...passportNames, passportNameToAdd]);
-
-        setNewPassport('');
-
-        if (newPassportInputRef.current != null) {
-            newPassportInputRef.current.value = '';
-        }
-    }
+    
 
     const handleErrorClose = () => {
         setShowError(false);
     };
-
     const handleSuccessClose = () => {
         setShowSuccess(false);
         if (req?.Status != 'Черновик') {
             window.location.href = '/passports';
         }
     };
-
     const sendChanges = async (status: string) => {
         if (!userToken) {
             return;
         }
-
         var req_id = 0;
-        
-
         if (req?.ID !== undefined) {
             req_id = req?.ID;
         }
-
         const editResult = await changeReqStatus(userToken, {
             ID: req_id,
             Status: status,
         });
-        console.log(editResult);
-
+       
 
         if (!passportNames || !userToken) {
             return;
@@ -164,7 +119,8 @@ const BorderCrossFactDetPage: FC = () => {
                 setShowError(true);
             }
             console.log(passportsResult);
-            if (status != 'Черновик'){
+            
+            if (status != 'Черновик') {
                 localStorage.setItem("passports", '')
                 window.location.href = '/passports';
             }
@@ -173,7 +129,6 @@ const BorderCrossFactDetPage: FC = () => {
             setPassportNames([]);
         }
     };
-
     return (
         <div className="container">
             <Modal show={showError} onHide={handleErrorClose}>
@@ -199,57 +154,33 @@ const BorderCrossFactDetPage: FC = () => {
             <h1>Заявка #{req?.ID}</h1>
             <p>Статус: {req?.Status}</p>
             <h4>Паспорта:</h4>
-            <ListGroup className="list-group" style={{ width: '500px' }}>
-                {passportNames?.map((passportName, passportID) => (
-                    <ListGroupItem key={passportID} className="list-group-item">
-                        {passportName}
-                        {req?.Status === 'Черновик' && (
-                            <span className="button-group">
-                                <Button variant="danger" onClick={removePassport(passportName)}>Удалить</Button>
-                            </span>
+            <ListGroup className="list-group" style={{ width: '300px' }}>
+                {passports?.map((passport) => (
+                    <ListGroupItem key={passport.ID} className="list-group-item">
+                        {passport.Name}
+                        {passport.Image && (
+                            <img
+                                src={passport.Image}
+                                alt={`Image for ${passport.Name}`}
+                                style={{ width: '75px', height: '75px', position: 'absolute', right: '0' }}
+                            />
                         )}
+                        <div style={{ width: '75px', height: '75px' }}></div>
                     </ListGroupItem>
                 ))}
             </ListGroup>
-            {req?.Status === 'Черновик' && (
-                <div className="input-group">
-                    <Select
-                        options={options.map(option => ({ value: option.Name, label: option.Name }))}
-                        value={selectedPassport ? { value: selectedPassport.Name, label: selectedPassport.Name } : null}
-                        onChange={(value) => setSelectedPassport(options.find(option => option.Name === value?.value) || null)}
-                        isSearchable
-                        placeholder="Выберите паспорт..."
-                    />
-                    <Button onClick={addPassport} className="button">Добавить</Button>
-                </div>
-            )}
             <Form>
-                {req?.Status === 'Черновик' && (
-                    <Button onClick={() => sendChanges('Черновик')} className="button">Сохранить изменения</Button>
-                )}
                 <FormGroup className="form-group">
-                    {userRole === '1' && req?.Status === 'Черновик' && (
-                        <>
-                            <div>
-                                <Button className="common-button" variant="primary" 
-                                onClick={() => sendChanges('На рассмотрении')}>Сформировать</Button>
-                            </div>
-                            <div>
-                                <Button className="common-button" variant="danger" 
-                                onClick={() => sendChanges('Удалена')}>Отменить</Button>
-                            </div>
-                        </>
-                    )}
 
                     {userRole === '2' && req?.Status === 'На рассмотрении' && (
                         <>
                             <div>
-                                <Button className="common-button" variant="warning" 
-                                onClick={() => sendChanges('Отклонена')}>Отклонить</Button>
+                                <Button className="common-button" variant="warning"
+                                    onClick={() => sendChanges('Отклонена')}>Отклонить</Button>
                             </div>
                             <div>
-                                <Button className="common-button" variant="success" 
-                                onClick={() => sendChanges('Оказана')}>Одобрить</Button>
+                                <Button className="common-button" variant="success"
+                                    onClick={() => sendChanges('Оказана')}>Одобрить</Button>
                             </div>
                         </>
                     )}
@@ -261,6 +192,5 @@ const BorderCrossFactDetPage: FC = () => {
             </div>
         </div>
     );
-};
-
+}
 export default BorderCrossFactDetPage;

@@ -13,6 +13,7 @@ import { getRequestPassports } from '../modules/get-request-passports'
 import { useNavigate } from 'react-router-dom';
 import filtersSlice from "../store/filtersSlice";
 import PassportFilter from '../components/PassportFilter/PassportFilter';
+import loadTransfReq from '../modules/load-reqs';
 
 
 const PassportsPage: FC = () => {
@@ -33,30 +34,19 @@ const PassportsPage: FC = () => {
 
     useEffect(() => {
 
-        const loadTransfReqs = async () => {
-            if (userToken !== undefined && userToken !== '') {
-              const result = (await getTransfReqs(userToken?.toString(), 'Черновик')).filter((item) => {
-                if (userRole === '1') {
-                  return item.Client?.Name === userName;
-                } else {
-                  return [];
-                }
-              });
-              console.log(result)
-              if (result[0].ID) {
-                const passports = await getRequestPassports(result[0].ID, userToken?.toString());
-                var passportNames: string[] = [];
-                if (passports) {
-                  for (let passport of passports) {
-                    passportNames.push(passport.Name);
-                  }
-                  localStorage.setItem("passports", passportNames.join(","));
-                }
+      const fetchData = async () => {
+        const passportsData = await loadTransfReq(userToken?.toString(), userRole?.toString(), userName?.toString());
+        var passportNames: string[] = [];
+        if (passportsData) {
+          for (let passport of passportsData) {
+            passportNames.push(passport.Name);
               }
+              dispatch(cartSlice.actions.setPassports(passportNames));
             }
-          }
-          loadTransfReqs()
+          };
 
+          fetchData();
+         
         const loadPassports = async () => {
             try {
                 const result = await getAllPassports(name?.toString(), isGender?.toString());

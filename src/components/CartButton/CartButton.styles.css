@@ -1,0 +1,13 @@
+.cart-button {
+    display: inline-block;
+    right:100;
+    text-decoration: none;
+    background-color: #001246;
+    color: #ffffff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: rgba(19, 108, 191, 0.3);
+    }
+  }

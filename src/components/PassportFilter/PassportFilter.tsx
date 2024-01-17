@@ -1,5 +1,7 @@
 import React from 'react';
 import { Form, Row, Col, FormControl, FormLabel, FormCheck, Button } from 'react-bootstrap';
+import './PassportFilter.styles.css';
+
 
 interface PassportFilterProps {
   name: string | null;
@@ -19,11 +21,11 @@ const PassportFilter: React.FC<PassportFilterProps> = ({
   clearFilters,
 }) => {
   return (
-    <Form>
+    <Form className="passport-filter-container">
       <Row>
         <Col>
-          <FormLabel>Название паспорта:</FormLabel>
           <FormControl
+            placeholder='Название паспорта'
             type="text"
             value={name?.toString()}
             onChange={(e) => setName(e.target.value)}
@@ -45,13 +47,20 @@ const PassportFilter: React.FC<PassportFilterProps> = ({
             onChange={() => setIsGender(isGender === "0" ? "" : "0")}
           />
         </Col>
+        
+        </Row>
+      <Row className="passport-buttons">
+        <Col>
+          <Button className="passport-button" onClick={applyFilters}>
+            Поиск
+          </Button>
+        </Col>
+        <Col>
+          <Button variant="secondary" className="passport-button" onClick={clearFilters}>
+            Очистить
+          </Button>
+        </Col>
       </Row>
-      <Col>
-        <Button onClick={applyFilters}>Поиск</Button>
-      </Col>
-      <Col>
-        <Button variant="secondary" onClick={clearFilters}>Очистить</Button>
-      </Col>
     </Form>
   );
 };

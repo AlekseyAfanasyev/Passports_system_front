@@ -6,7 +6,7 @@ import { logoutUser } from '../modules/auth-actions';
 import '../styles/ProfilePage.styles.css';
 
 const Profile: FC = () => {
-    const { userToken, userName } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
+    const { userToken, userName, userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
     const isUserPresent = userToken !== undefined && userToken !== '';
 
     const dispatch = useAppDispatch();
@@ -27,6 +27,8 @@ const Profile: FC = () => {
             {isUserPresent &&
                 <>
                     <h1> Аккаунт </h1>
+                    {userRole == '1' && <p>Клиент</p> }
+                    {userRole == '2' && <p>Модератор</p> }
                     <p>Имя пользователя: {userName}</p>
                     <button onClick={handleLogout}> Выйти из системы </button>
                 </>

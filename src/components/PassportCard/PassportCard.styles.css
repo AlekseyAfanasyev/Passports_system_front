@@ -29,16 +29,18 @@
     margin: 10px 0;
 }
 
-.button {
-    background-color: rgb(224, 11, 22);
-    color: white;
+.button-card,
+.button-add {
     padding: 10px 20px;
-    text-decoration: none;
     border-radius: 5px;
     display: inline-block;
     margin-top: 10px;
-    font-family: "Century Gothic", sans-serif;
     font-size: 16px;
+    color: white;
+}
+
+.button-card {
+    background-color: #0E3E8DFF;
 }
 
 .button:hover {

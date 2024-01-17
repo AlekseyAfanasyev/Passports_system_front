@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import store, { useAppDispatch } from '../../store/store';
 import { logoutUser } from '../../modules/auth-actions';
 import './NavigationMain.styles.css';
+import CartButton from '../CartButton/CartButton';
 
 const NavigationMain: FC = () => {
     const { userToken, userRole, userName } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
@@ -16,7 +17,7 @@ const NavigationMain: FC = () => {
     const handleLogout = () => {
         if (userToken) {
             dispatch(logoutUser(userToken));
-            navigate('/passports/');
+            navigate('/passports');
         }
     };
     return (

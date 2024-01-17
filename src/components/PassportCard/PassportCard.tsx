@@ -6,6 +6,8 @@ import { changePassportStatus } from '../../modules/change-passport-status';
 import "./PassportCard.styles.css"
 import cartSlice from '../../store/cartSlice'
 import store, { useAppDispatch } from '../../store/store'
+import { createRequest } from '../../modules/create-req-mm';
+import { deletePassportTransfer } from '../../modules/delete-req-mm';
 
 
 interface Props {
@@ -24,11 +26,11 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
 
     const { userRole, userToken } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
 
-    const handleAddPassportToCart = () => {
-        dispatch(cartSlice.actions.addPassport(passportName));
-    }
+    const isPassportInCart = useSelector((state: ReturnType<typeof store.getState>) =>
+    state.cart.passports?.includes(passportName)
+);
 
-    const isPassportInCart = localStorage.getItem('passports')?.split(',').includes(passportName);
+
 
     const handleStatusChange = async () => {
         setIsStatusChanging(true);
@@ -41,6 +43,24 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
         } finally {
             setIsStatusChanging(false);
             navigate('/passports');
+        }
+    };
+
+    const handleCreateRequest = async () => {
+        try {
+            if(!userToken){
+                return
+            }
+            if (isPassportInCart) {
+                const response = await deletePassportTransfer(passportName, localStorage.getItem("reqID"), userToken);
+                dispatch(cartSlice.actions.removePassport(passportName));
+            } else {
+                const response = await createRequest(passportName, userToken);
+                localStorage.setItem("reqID", response.data)
+                dispatch(cartSlice.actions.addPassport(passportName));
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
         }
     };
 
@@ -65,7 +85,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
                 <div></div>
                 {userRole === '2' && (
                     <Button
-                        className='button'
+                    className='button-card'
                         onClick={handleStatusChange}
                         disabled={isStatusChanging}
                     >
@@ -73,13 +93,16 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
                     </Button>
             )}
             {userRole === '1' && (
-                    <Button
-                        className='button'
-                        onClick={handleAddPassportToCart}
-                        disabled={isPassportInCart}
-                    >
-                        {isPassportInCart ? 'Добавлено' : 'Добавить'}
-                    </Button>
+                     <>
+                     <div style={{ width: '1px', height: '1px' }}></div>
+                     <Button
+                         className='button-add'
+                         onClick={handleCreateRequest}
+                         variant={isPassportInCart ? 'danger' : 'success'}
+                     >
+                         {isPassportInCart ? 'Удалить' : 'Добавить'}
+                     </Button>
+                 </>
                 )}
             </Card.Body>
         </Card>

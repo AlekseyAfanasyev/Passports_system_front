@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-export const createRequest = async(passports: string[], userToken: string): Promise<AxiosResponse> => {
+export const createRequest = async(passport: string, userToken: string): Promise<AxiosResponse> => {
     const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -8,9 +8,9 @@ export const createRequest = async(passports: string[], userToken: string): Prom
         },
       }
       return axios.post(
-        '/api/border_crossing_facts/create',
+        `/api/passports/${encodeURIComponent(passport)}/add`,
         {
-          'passports': passports,
+          'passport': passport,
         },
         config
 

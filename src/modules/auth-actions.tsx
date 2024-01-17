@@ -1,5 +1,5 @@
-import axios from 'axios'
-import { createAsyncThunk} from '@reduxjs/toolkit'
+import axios, { AxiosError } from 'axios'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 
 interface AuthInterface {
   login: string,
@@ -27,8 +27,10 @@ export const registerUser = createAsyncThunk(
 
     // return custom error message from backend if present
       if (error.response && error.response.data.message) {
+        console.log("1", rejectWithValue(error.response.data.message))
         return rejectWithValue(error.response.data.message)
       } else {
+        console.log("2", rejectWithValue(error.message))
         return rejectWithValue(error.message)
       }
     }
@@ -62,8 +64,10 @@ export const loginUser = createAsyncThunk(
       }
 
       if (error.response && error.response.data.message) {
+        console.log("1", rejectWithValue(error.response.data.message))
         return rejectWithValue(error.response.data.message)
       } else {
+        console.log("2", rejectWithValue(error.message))
         return rejectWithValue(error.message)
       }
     }
@@ -80,6 +84,7 @@ export const loginUser = createAsyncThunk(
         localStorage.setItem("requestStatus", '')
         localStorage.setItem("passportName", '')
         localStorage.setItem("passportGender", '')
+        localStorage.setItem("reqID", '')
         
         const config = {
           headers: {
@@ -101,8 +106,10 @@ export const loginUser = createAsyncThunk(
         }
 
         if (error.response && error.response.data.message) {
+          console.log("1", rejectWithValue(error.response.data.message))
           return rejectWithValue(error.response.data.message)
         } else {
+          console.log("2", rejectWithValue(error.message))
           return rejectWithValue(error.message)
         }
     }

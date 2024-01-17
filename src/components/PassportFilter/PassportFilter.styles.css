@@ -1,0 +1,52 @@
+.passport-filter-container {
+    background-color: #FFFFFF;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgb(0, 18, 70);
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .passport-label {
+    font-size: 20px;
+    margin: 10px 0;
+  }
+
+  .passport-input {
+    padding: 10px;
+    border: 2px solid #0E3E8DFF;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .passport-input:focus {
+    border-color: #001246;
+  }
+
+  .passport-buttons {
+    width: 100%;
+    display:inline-flex;
+    justify-content:space-between;
+  }
+
+  .passport-button {
+    margin-inline-end: 10px;
+    margin-inline-start: 40px;
+    background-color: #0E3E8DFF;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    font-family: "Century Gothic", sans-serif;
+    font-size: 16px;
+  }
+
+  .passport-button:hover {
+    background-color: #001246;
+  }
