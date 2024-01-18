@@ -1,60 +1,49 @@
-.card {
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 10px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgb(0, 18, 70);
+.request-filter-container {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  font-family: "Century Gothic", sans-serif;
+  width: 400px;
 }
 
-.image-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 300px;
+.request-filter-form {
+  display: flex;
+  align-items: center;
 }
 
-.card_image {
-    width: 400px;
-    height: 400px;
-    object-fit: contain;
-    max-width: 100%;
-    max-height: 100%;
+.request-filter-label {
+  margin-left: 15px;
+  font-weight: bold;
 }
 
-.card_title {
-    font-size: 20px;
-    margin: 10px 0;
+.request-filter-select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-left: 77px;
+  font-family: "Century Gothic", sans-serif;
+  width: 190px;
 }
 
-.button-card,
-.button-add {
-    padding: 10px 20px;
-    border-radius: 5px;
-    display: inline-block;
-    margin-top: 10px;
-    font-size: 16px;
-    color: white;
+.label-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
 }
 
-.button-card {
-    background-color: #0E3E8DFF;
+.date-label {
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-.button:hover {
-    background-color: #001246;
-}
-
-.card_status {
-    font-weight: bold;
-    color: #333;
-    margin-top: 10px;
-}
-
-.card_body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.date-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-family: "Century Gothic", sans-serif;
+  width: 100%;
 }

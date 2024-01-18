@@ -23,8 +23,10 @@ const queryParams = new URLSearchParams({
 });
 
 return axios.get(`/api/border_crossing_facts?${queryParams.toString()}`, config)
+
     .then((response) => {
         const { data } = response;
+        console.log("!!!", data)
         return data;
     });
 };

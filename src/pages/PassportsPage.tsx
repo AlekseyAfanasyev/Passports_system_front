@@ -139,12 +139,6 @@ const PassportsPage: FC = () => {
 
     return (
         <div>
-      {userToken && userRole === '1' && <CartButton />}
-      {userToken && userRole === '2' && (
-        <Button onClick={() => navigate(`/passports/add_new_passport`)} className='cart-button'>
-          Новый паспорт
-        </Button>
-      )}
             <Modal show = {added} onHide={handleModalClose}>
         <Modal.Header closeButton>
           <Modal.Title>Паспорт добавлен в заявку</Modal.Title>
