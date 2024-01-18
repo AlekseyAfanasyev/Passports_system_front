@@ -10,9 +10,11 @@ import PassportsPage from './pages/PassportsPage'
 import PassportPage from './pages/PassportPage'
 import PassportForm from './components/PassportForm/PassportForm';
 
-import AuthPage from './pages/AuthPage';
+import LoginPage from './pages/AuthPage';
+import Register from './pages/RegisterPage/RegisterPage';
 import Profile from './pages/ProfilePage';
-import BorderCrossFact from './pages/BorderCrossFactPage';
+// import BorderCrossFact from './pages/BorderCrossFactPage';
+import TransfReq from './pages/RequestsAllPage/RequestsAllPage';
 import BorderCrossFactDetPage from './pages/BorderCrossFactDetPage';
 import Cart from './pages/CartPage';
 import NotFoundPage from './NotFoundPage';
@@ -28,13 +30,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/passports" Component={PassportsPage} />
           <Route path="/passports/:passport_name" Component={PassportPage} />
-          <Route path="/border_crossing_facts" Component={BorderCrossFact} />
+          <Route path="/border_crossing_facts" Component={TransfReq} />
           <Route path="/border_crossing_facts/:req_id" Component={BorderCrossFactDetPage} />
           <Route path="/passports/:passport_name/edit" element={<PassportForm />} />
           <Route path="/passports/add_new_passport" element={<PassportForm />} />
           <Route path="/cart" Component={Cart} />
-          <Route path="/auth" Component={AuthPage} />
           <Route path="/profile" Component={Profile} />
+          <Route path="/login" Component={LoginPage} />
+          <Route path="/register" Component={Register} />
           <Route path="*" Component={NotFoundPage} />
         </Routes>
         <Footer />

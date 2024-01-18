@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Button, Card, Row } from 'react-bootstrap';
+import { Button, Card, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { changePassportStatus } from '../../modules/change-passport-status';
@@ -51,7 +51,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, onSta
                 return
             }
             if (isPassportInCart) {
-                const response = await deletePassportTransfer(passportName, localStorage.getItem("reqID"), userToken);
+                await deletePassportTransfer(passportName, localStorage.getItem("reqID"), userToken);
                 dispatch(cartSlice.actions.removePassport(passportName));
             } else {
                 const response = await createRequest(passportName, userToken);
@@ -78,11 +78,22 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, onSta
             </div>
             <Card.Body>
                 <div className='card_title'>
+                    <Card.Title style={{fontWeight: 'bold'}}> {passportName} </Card.Title>
                     <Card.Title> Статус: {passportStatus ? "Доступен" : "Недоступен"} </Card.Title>
                 </div>
                 <Button className='button' onClick={() => (navigate(`/passports/${encodeURIComponent(passportName)}`))}> Подробнее </Button>
                 <div></div>
                 {userRole === '2' && (
+                    <>
+                     <Col>
+                     <Button
+                         className='button-card'
+                         variant='success'
+                         onClick={() => navigate(`/passports/${encodeURIComponent(passportName)}/edit`)}
+                     >
+                         Изменить
+                     </Button>
+                 </Col>
                     <Button
                     className='button-card'
                         onClick={handleStatusChange}
@@ -90,6 +101,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, onSta
                     >
                         {isStatusChanging ? 'Удаление...' : 'Удалить'}
                     </Button>
+                    </>
             )}
             {userRole === '1' && (
                      <>

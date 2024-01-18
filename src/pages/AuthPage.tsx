@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import {Button, Spinner, Modal} from 'react-bootstrap'
 
-import '../styles/AuthPage.styles.css';
+import '../styles/LoginPage.styles.css';
 
 import store, { useAppDispatch } from '../store/store'
 import { loginUser, registerUser } from '../modules/auth-actions';
@@ -14,9 +14,9 @@ interface InputChangeInterface {
   }
 
 
-const AuthPage: FC = () => {
+const LoginPage: FC = () => {
 
-    const {loading, userInfo, error, success} = useSelector(
+    const {loading, error, success} = useSelector(
         (state: ReturnType<typeof store.getState> ) => state.auth
     )
 
@@ -28,9 +28,7 @@ const AuthPage: FC = () => {
 
     const [showRegisterModal, setShowRegisterModal] = useState(true)
 
-    const handleRegisterModalClose = () => {
-        setShowRegisterModal(false)
-    }
+   
 
     const handleLoginChange = (event: InputChangeInterface) => {
         setLogin(event.target.value)
@@ -46,32 +44,23 @@ const AuthPage: FC = () => {
       };
     
 
-    const sendRegister = async () => {
-        setShowRegisterModal(true)
-        dispatch(registerUser({login: login, password: password}));
-    }
+   
 
     useEffect(() => {
-        if (success) {
-          navigate('/passports');
-          window.location.reload()
-          }
-    }, [navigate, userInfo, success])
+      if (success) {
+        const sendLogin = async () => await dispatch(loginUser({ login: login, password: password }));
+        sendLogin()
+      }
+      if (success && !showRegisterModal) {
+        navigate('/passports');
+        window.location.reload()
+      }
+    }, [showRegisterModal, success])
 
 
 
     return (
         <>
-          <Modal show={success && showRegisterModal && !loading} onHide={handleRegisterModalClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Регистрация прошла успешно!</Modal.Title>
-            </Modal.Header>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleRegisterModalClose}>
-                Закрыть
-              </Button>
-            </Modal.Footer>
-          </Modal>
 
           <div className="login-card">
             <h1>Вход</h1>
@@ -86,7 +75,8 @@ const AuthPage: FC = () => {
             <button onClick={sendLogin} disabled={loading}>
               Войти
             </button>
-            <button onClick={sendRegister} disabled={loading}>
+            <div style={{ textAlign: 'center', marginTop: '30px' }}>Нет аккаунта?</div>
+            <button onClick={() => (navigate(`/register`))}>
               Регистрация
             </button>
             {loading ? <Spinner /> : ''}
@@ -95,4 +85,4 @@ const AuthPage: FC = () => {
       );
     };
 
-    export default AuthPage;
+    export default LoginPage;

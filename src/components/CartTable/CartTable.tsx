@@ -1,6 +1,7 @@
 import React from "react";
 import { ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { RxDragHandleHorizontal } from "react-icons/rx";
 
 interface DragAndDropListProps {
   transfersOrder: { [passport: string]: number };
@@ -18,17 +19,20 @@ const CartTable: React.FC<DragAndDropListProps> = ({
       <Droppable droppableId="transfersOrder">
         {(provided) => (
           <ListGroup style={{ width: "500px" }} ref={provided.innerRef} {...provided.droppableProps}>
-            {Object.entries(transfersOrder).map(([passportName, transferOrder], index) => (
+            {Object.entries(transfersOrder).map(([passportName], index) => (
               <Draggable key={passportName} draggableId={passportName} index={index}>
-                {(provided, snapshot) => (
+                {(provided) => (
                   <ListGroupItem
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    {passportName}
+                    <span className="drag-handle">
+                      <RxDragHandleHorizontal style={{marginTop:'5px'}}size={30}/>
+                    </span>
+                    <div style={{fontSize:'20px', marginTop:'5px', marginLeft:'5px'}}>{passportName}</div>
                     <span className="delete-button">
-                      <Button variant="danger" onClick={deleteFromCart(passportName)}>
+                    <Button variant="danger" style={{marginTop:'0px'}} onClick={deleteFromCart(passportName)}>
                         Удалить
                       </Button>
                     </span>

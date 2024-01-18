@@ -8,13 +8,16 @@ import store, { useAppDispatch } from '../store/store';
 import cartSlice from '../store/cartSlice';
 import PassportCard from '../components/PassportCard/PassportCard';
 import SearchForm from '../components/SearchForm/SearchForm';
+import PassportTable from '../components/PassportTable/PassportTable';
+import { changePassportStatus } from '../modules/change-passport-status';
 import { useNavigate } from 'react-router-dom';
 import filtersSlice from "../store/filtersSlice";
 import PassportFilter from '../components/PassportFilter/PassportFilter';
-import loadTransfReq from '../modules/load-reqs';
 import { getRequestPassports } from '../modules/get-request-passports';
 import getRequestByStatus from '../modules/get-req-by-status';
 import CartButton from '../components/CartButton/CartButton';
+import { BsGrid, BsTable } from 'react-icons/bs';
+
 
 
 const PassportsPage: FC = () => {
@@ -31,12 +34,21 @@ const PassportsPage: FC = () => {
 
     const { passportIsGender } = useSelector((state: ReturnType<typeof store.getState>) => state.filters);
     const [isGender, setIsGender] = useState(passportIsGender);
+    const [isStatusChanging, setIsStatusChanging] = useState(false);
+    const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+
+    const ToggleIcon = viewMode === 'table' ? BsGrid : BsTable;
+
+    const toggleViewMode = () => {
+      setViewMode((prevMode) => (prevMode === 'table' ? 'cards' : 'table'));
+    };
 
 
     useEffect(() => {
 
       const loadDraftRequest = async () => {
-        const result = (await getRequestByStatus(userToken?.toString(), userRole, userName, 'Черновик'))
+        const result = (await getRequestByStatus(userToken?.toString(), 
+                      userRole, userName, 'Черновик', '', '', /*''*/))
         if (!result) {
           return
         }
@@ -98,13 +110,26 @@ const PassportsPage: FC = () => {
   
     };
 
-    const handleStatusChange = (passportName: string, newStatus: boolean) => {
+    const handleStatusChange = async (passportName: string, newStatus: boolean) => {
+      setIsStatusChanging(true);
+  
+      try {
+        await changePassportStatus(userToken?.toString(), passportName);
+  
         setPassports((passports) =>
-            passports.map((passport) =>
-                passport.Name === passportName ? { ...passport, IsFree: newStatus } : passport
-            )
+          passports.map((passport) =>
+            passport.Name === passportName ? { ...passport, IsAvailable: newStatus } : passport
+          )
         );
+  
         setPassports((passports) => passports.filter((passport) => passport.Name !== passportName));
+  
+      } catch (error) {
+        console.error('Error while changing passport status:', error);
+      } finally {
+        setIsStatusChanging(false);
+        navigate('/passports');
+      }
     };
 
     const handleModalClose = () => {
@@ -114,8 +139,12 @@ const PassportsPage: FC = () => {
 
     return (
         <div>
-          {userToken && userRole === '2' && <Button 
-      onClick={() => (navigate(`/passports/add_new_passport`))} className='cart-button'> Новый паспорт </Button>}
+      {userToken && userRole === '1' && <CartButton />}
+      {userToken && userRole === '2' && (
+        <Button onClick={() => navigate(`/passports/add_new_passport`)} className='cart-button'>
+          Новый паспорт
+        </Button>
+      )}
             <Modal show = {added} onHide={handleModalClose}>
         <Modal.Header closeButton>
           <Modal.Title>Паспорт добавлен в заявку</Modal.Title>
@@ -127,6 +156,15 @@ const PassportsPage: FC = () => {
         </Modal.Footer>
       </Modal>
       {userToken && userRole === '1' && <CartButton/>}
+      {userToken && userRole === '2' && (
+        <>
+        <Button 
+      onClick={() => (navigate(`/passports/add_new_passport`))} className='cart-button'> Новый паспорт </Button>
+      <div className='toggle-view-icon' onClick={toggleViewMode}>
+            <ToggleIcon style={{ position: 'absolute', left: '20px', marginTop: '100px' }} size={40} />
+          </div>
+          </>
+      )}
       <PassportFilter
         name={name}
         isGender={isGender}
@@ -135,20 +173,29 @@ const PassportsPage: FC = () => {
         applyFilters={applyFilters}
         clearFilters={clearFilters}
       />
+      {userRole === '2' ? (
+        <PassportTable
+          passports={passports}
+          handleStatusChange={handleStatusChange}
+          isStatusChanging={isStatusChanging} />
+      ) : (
             <div className="card_group">
                 {passports.map((passport, index) => (
+                  <div key={index} className="passport-card">
                     <PassportCard
-                        key={index}
                         imageUrl={passport.Image}
                         passportName={passport.Name}
                         passportStatus={passport.IsFree}
                         changeStatus={`/passports/change_status/${passport.Name}`}
                         onStatusChange={handleStatusChange}
-                    />
-                ))}
-            </div>
-        </div>
-    );
-};
+                        />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            
+            };
 
 export default PassportsPage;

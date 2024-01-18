@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import {FC} from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import store from '../../store/store';
 import './CartButton.styles.css';
+import { Button } from 'react-bootstrap';
 
-const CartButton: React.FC = () => {
+const CartButton: FC = () => {
     const passports = useSelector((state: ReturnType<typeof store.getState>) => state.cart.passports);
+    const navigate = useNavigate()
 
   return (
-    <NavLink to="/cart" className="cart-button">
+    <Button 
+      className={"cart-button"} 
+      disabled={passports?.length === 0}
+      onClick={() => (navigate(`/cart`))}>
       Корзина ({passports?.length || 0})
-    </NavLink>
+    </Button>
   );
 };
 

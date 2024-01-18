@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
-import { Button, Col, Form, FormGroup, ListGroup, ListGroupItem, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, FormGroup, ListGroup, ListGroupItem, Modal, Row, Table } from "react-bootstrap";
 import Select from 'react-select';
 import { getDetailedReq } from '../modules/get-detailed-request';
 import { getRequestPassports } from "../modules/get-request-passports";
@@ -13,6 +13,7 @@ import { getAllPassports } from "../modules/get-all-passports";
 import "../styles/BorderCrossFactDetPage.styles.css";
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { getExtractionData } from "../modules/get-biometry-data";
 
 
 const BorderCrossFactDetPage: FC = () => {
@@ -29,6 +30,7 @@ const BorderCrossFactDetPage: FC = () => {
     
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate()
+    const [extractions, setExtraction] = useState<number[][] | undefined>()
 
     useEffect(() => {
         const pathname = window.location.pathname;
@@ -55,6 +57,9 @@ const BorderCrossFactDetPage: FC = () => {
             const reqID: number = reqIdString ? parseInt(reqIdString, 10) : 0;
             const requestPassports = await getRequestPassports(reqID, userToken);
             setPassports(requestPassports);
+            const extractions = await getExtractionData(+reqIdString, userToken)
+            console.log("---",extractions)
+            setExtraction(extractions)
         };
 
         loadReq();
@@ -80,7 +85,7 @@ const BorderCrossFactDetPage: FC = () => {
             return;
         }
         try {
-            const editResult = await changeReqStatus(userToken, {
+            await changeReqStatus(userToken, {
                 ID: req.ID,
                 Status: status,
             });
@@ -106,21 +111,51 @@ const BorderCrossFactDetPage: FC = () => {
             <p>Статус: {status}</p>
             {status !== 'Отклонена' && (<>
                 <h4>Паспорта:</h4>
-                <ListGroup className="list-group" style={{ width: '300px' }}>
-                    {passports?.map((passport) => (
-                        <ListGroupItem key={passport.ID} className="list-group-item">
-                            {passport.Name}
-                            {passport.Image && (
-                                <img
-                                    src={passport?.Image}
-                                    onError={(e) => { e.currentTarget.src = '/DEFAULT.jpg' }}
-                                    style={{ width: '75px', height: '75px', position: 'absolute', right: '0' }}
-                                />
-                            )}
-                            <div style={{ width: '75px', height: '75px' }}></div>
-                        </ListGroupItem>
-                    ))}
-                </ListGroup>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Table bordered striped style={{ width: '600px' }}>
+                    <thead>
+                        <tr>
+                            <th style={{ width: '50px' }}>Имя</th>
+                            <th style={{ width: '40px' }}>Картинка</th>
+                            <th style={{ width: '50px' }}>Факт прохода по биометрии</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {passports?.map((passport) => {
+                        let extraction_data: number[] | undefined;
+
+                        if (extractions) {
+                            extraction_data = extractions.find((item) => item[0] === passport.ID);
+                        }
+
+                        return (
+                            <tr key={passport.ID}>
+                                <td style={{ width: '50px', height: '90px' }}>
+                                    {passport.Name}
+                                </td>
+                                <td style={{ width: '40px', height: '40px', position: 'relative' }}>
+                                    {passports && (
+                                        <img
+                                            src={passport?.Image}
+                                            onError={(e) => { e.currentTarget.src = '/DEFAULT.jpg' }}
+                                            style={{ width: '70%',
+                                            height: '120%',
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)' }}
+                                        />
+                                    )}
+                                </td>
+                                <td style={{ width: '50px' }}>{extraction_data ? extraction_data[1] : '-'}</td>
+
+                            </tr>
+                        );
+                    })}
+
+                        </tbody>
+                </Table>
+            </div>
             </>)}
             <Form>
                 <FormGroup className="form-group">

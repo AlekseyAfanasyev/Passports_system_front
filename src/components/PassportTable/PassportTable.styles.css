@@ -1,0 +1,48 @@
+.passport-table {
+    width: 800px;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .passport-table th, .passport-table td {
+    border: 1px solid #dddddd;
+    text-align: left;
+  }
+
+  .passport-table th {
+    background-color: #f2f2f2;
+  }
+
+  .passport-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .passport-table tbody tr:hover {
+    background-color: #e0e0e0;
+  }
+
+
+  .passport-center-table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .passport-table-button {
+    background-color: #0E3E8DFF;
+    color: white;
+    padding: 10px 20px;
+    margin-left: 60px;
+    margin-top:10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    font-family: "Century Gothic", sans-serif;
+    font-size: 16px;
+    width: 150px;
+}
+
+.passport-table-button:hover {
+    background-color: #001246;
+}

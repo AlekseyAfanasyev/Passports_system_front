@@ -1,9 +1,14 @@
 import axios from 'axios';
 
-export const uploadPassportImage = async (userToken: string | undefined, imageFile: File): Promise<string> => {
+export const uploadPassportImage = async (
+    userToken: string | undefined,
+    imageFile: File,
+    passportName: string | undefined)
+    : Promise<string> => {
   try {
     const formData = new FormData();
     formData.append('image', imageFile);
+    formData.append('passportName', passportName || "");
     const response = await axios.post<string>(`/api/passports/upload_image`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

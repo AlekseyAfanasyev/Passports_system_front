@@ -74,7 +74,7 @@ export const loginUser = createAsyncThunk(
   });
 
   export const logoutUser = createAsyncThunk(
-    '/auth/logout',
+    '/api/logout',
     async(userToken: string, {rejectWithValue}) => {
       try {
         localStorage.setItem('userToken', '')
@@ -85,6 +85,9 @@ export const loginUser = createAsyncThunk(
         localStorage.setItem("passportName", '')
         localStorage.setItem("passportGender", '')
         localStorage.setItem("reqID", '')
+        localStorage.setItem("reqStartDate", "")
+        localStorage.setItem("reqFinDate", "")
+        localStorage.setItem("reqClient", "")
         
         const config = {
           headers: {

@@ -18,7 +18,6 @@ const initialState = {
     userToken,
     userName,
     userRole,
-    userInfo: {},
     error: null,
     success: false,
 }

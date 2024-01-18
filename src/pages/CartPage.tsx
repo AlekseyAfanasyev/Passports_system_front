@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Button, ListGroup, ListGroupItem, Modal, Col, Row  } from "react-bootstrap";
+import { Button, ListGroup, ListGroupItem, Modal, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import {useSelector } from "react-redux/es/hooks/useSelector";
 import cartSlice from "../store/cartSlice";
@@ -7,6 +7,7 @@ import store, { useAppDispatch } from "../store/store";
 import { deletePassportTransfer } from "../modules/delete-req-mm";
 import "../styles/CartPage.styles.css"
 import { changeReqStatus } from "../modules/change-req-status";
+import { DropResult } from "react-beautiful-dnd";
 
 interface InputChangeInterface {
     target: HTMLInputElement;
@@ -25,13 +26,20 @@ const Cart: FC = () => {
 
 
     const deleteFromCart = (passportName = '') => {
-        return (event: React.MouseEvent) => {
-            if (!userToken) {
-                return
-            }
-            const response = deletePassportTransfer(passportName, localStorage.getItem("reqID"), userToken);
-            dispatch(cartSlice.actions.removePassport(passportName))
-            event.preventDefault()
+        if (!userToken) {
+            return;
+          }
+          return async ()  => {
+            await deletePassportTransfer(passportName, localStorage.getItem("reqID"), userToken)
+              .then(() => {
+                dispatch(cartSlice.actions.removePassport(passportName));
+                if (passports.length === 1) {
+                  deleteRequest()
+                }
+              })
+              .catch(() => {
+                setShowError(true);
+              });
         }
     }
 
@@ -43,21 +51,19 @@ const Cart: FC = () => {
         const reqIDString: string | null = localStorage.getItem("reqID");
         const reqID: number = reqIDString ? parseInt(reqIDString, 10) : 0;
 
-        const editResult = await changeReqStatus(userToken, {
+        await changeReqStatus(userToken, {
             ID: reqID,
             Status: "На рассмотрении",
         });
 
         localStorage.setItem("reqID", "")
 
-        const storedPassportsString: string[] | undefined = localStorage.getItem('passports')?.split(',');
-        if (storedPassportsString) {
-
-            storedPassportsString.forEach((passportName: string) => {
+        if (passports) {
+            passports.forEach((passportName: string) => {
                 dispatch(cartSlice.actions.removePassport(passportName));
             });
 
-            localStorage.setItem("passports", "");
+            localStorage.setItem("reqID", "")
         }
         setRedirectUrl(`/border_crossing_facts/${reqID}`)
         setShowSuccess(true)
@@ -71,23 +77,18 @@ const Cart: FC = () => {
         const reqIDString: string | null = localStorage.getItem("reqID");
         const reqID: number = reqIDString ? parseInt(reqIDString, 10) : 0;
 
-        const response = await changeReqStatus(userToken, {
+        await changeReqStatus(userToken, {
             ID: reqID,
             Status: "Удалена",
         });
 
-        localStorage.setItem("reqID", "")
-
-        const storedPassportsString: string[] | undefined = localStorage.getItem('passports')?.split(',');
-        if (storedPassportsString) {
-
-            storedPassportsString.forEach((passportName: string) => {
+        if (passports) {
+            passports.forEach((passportName: string) => {
                 dispatch(cartSlice.actions.removePassport(passportName));
             });
 
-            localStorage.setItem("passports", "");
+            localStorage.setItem("reqID", "")
         }
-        navigate(`/passports`)
     };
 
     const handleErrorClose = () => {

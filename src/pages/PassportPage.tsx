@@ -11,11 +11,14 @@ import { Row, Col, Button } from 'react-bootstrap';
 
 
 
+
+
 const PassportPage: FC = () => {
     const [passport, setPassport] = useState<Passport | null>(null);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate()
-    const { userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth)
+    
+    
 
     
     const { passport_name } = useParams();
@@ -73,17 +76,14 @@ const PassportPage: FC = () => {
                         <p><span className="passport-label">Место рождения:</span> {passport?.BDplace}</p>
                     </div>
                 </div>
-                <button className="button-det" onClick={() => (navigate(`/passports/`))}>Назад</button>
-                {userRole == '2' && (<>
-                <Col>
-                {/* <button onClick={() => navigate(`/passports/${passport?.}/edit`)} className="button-det">
-                        Изменить
-                    </button> */}
-                </Col>
-        </>)}
-            </div>
+                <Row>
+      <Col>
+      <button className="button-det" onClick={() => (navigate(`/passports/`))}>Назад</button>
+      </Col>
+      </Row>
+        </div>
         </div>
     );
 };
 
-export default PassportPage
+export default PassportPage;

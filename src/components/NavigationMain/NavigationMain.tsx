@@ -63,7 +63,7 @@ const NavigationMain: FC = () => {
                         </>}
                     {!userToken &&
                         <>
-                            <NavLink to="/auth" className='nav-link'>Вход</NavLink>
+                            <NavLink to="/login" className='nav-link'>Вход</NavLink>
                         </>}
                 </Nav>
             </Navbar.Collapse>

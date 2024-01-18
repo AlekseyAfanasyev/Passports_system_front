@@ -8,9 +8,12 @@ interface EndpointToLabelMap {
 const endpointToLabel: EndpointToLabelMap = {
   'passports': 'Паспорта',
   'profile': 'Личный кабинет',
-  'auth': 'Вход',
+  'login': 'Вход',
   'border_crossing_facts': 'Заявки',
-  'cart' : 'Корзина'
+  'cart' : 'Корзина',
+  'register' : 'Регистрация',
+  'add' : 'Добавление',
+  'edit' : 'Изменение',
 };
 
 

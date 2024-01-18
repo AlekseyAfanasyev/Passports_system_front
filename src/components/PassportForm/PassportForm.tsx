@@ -8,6 +8,7 @@ import { getPassportByName } from '../../modules/get-passport-by-name';
 import { editPassport } from '../../modules/EditPassport';
 import { addNewPassport } from '../../modules/AddNewPassport';
 import { uploadPassportImage } from '../../modules/UploadPassportImage';
+import "./PassportForm.styles.css"
 
 const PassportForm: FC = () => {
     const navigate = useNavigate();
@@ -19,6 +20,7 @@ const PassportForm: FC = () => {
 
     useEffect(() => {
         if (passport_name && passport_name !== 'add') {
+            localStorage.setItem("flag", "edit")
             getPassportByName(passport_name)
                 .then((response) => setPassport(response))
                 .catch((error) => console.error('Ошибка при получении данных о паспорте:', error));
@@ -35,7 +37,7 @@ const PassportForm: FC = () => {
                 Image: '',
                 IsFree: false
             });
-            setPassportAdd("add");
+            localStorage.setItem("flag", "add")
         }
     }, []);
 
@@ -56,7 +58,7 @@ const PassportForm: FC = () => {
     const handleImageUpload = async () => {
         try {
             if (imageFile) {
-                const imageUrl = await uploadPassportImage(userToken?.toString(), imageFile);
+                const imageUrl = await uploadPassportImage(userToken?.toString(), imageFile, passport?.Name);
                 setPassport((prevPassport) => ({
                     ...prevPassport!,
                     ImageURL: imageUrl,
@@ -76,16 +78,19 @@ const PassportForm: FC = () => {
             await handleImageUpload();
 
             if (passport) {
-                if (passport_name && passport_name !== passportAdd) {
-                    console.log("passport image add: ", passport?.Image);
+                if (passport_name && localStorage.getItem("flag") == "edit") {
+                    console.log("passport image edit: ", passport?.Image);
                     const updatedPassport = await editPassport(userToken?.toString(), passport);
                     setPassport(updatedPassport);
+                    navigate(`/passports/${updatedPassport.Name}/edit`);
                 } else {
-                    console.log("passport image edit: ", passport?.Image);
+                    console.log("passport image add: ", passport?.Image);
                     const newPassport = await addNewPassport(userToken?.toString(), passport);
                     setPassport(newPassport);
+                    localStorage.setItem("flag", "edit")
                     navigate(`/passports/${newPassport.Name}/edit`);
                 }
+                await handleImageUpload();
             }
         } catch (error) {
             console.error('Ошибка при сохранении паспорта:', error);
@@ -93,15 +98,23 @@ const PassportForm: FC = () => {
     };
 
     return (
+        <div className="form-container">
         <Form onSubmit={handlePassportSubmit} encType="multipart/form-data">
-            <Form.Group controlId="formPassportImage">
-                <Form.Label>Изображение</Form.Label>
-                <Form.Control
-                    type="file"
-                    name="image"
-                    onChange={handleChange}
-                />
-            </Form.Group>
+        <Form.Group controlId="formPassportImage">
+            
+            <Form.Control
+                type="file"
+                name="image"
+                onChange={handleChange}
+            />
+            {passport?.Image && (
+            <img
+                src={passport.Image}
+                alt={`Passport ${passport.Name} Image`}
+                style={{ maxWidth: '40%', marginBottom: '10px' }}
+            />
+        )}
+        </Form.Group>
             <Form.Group controlId="formPassportName">
                 <Form.Label>Название паспорта</Form.Label>
                 <Form.Control
@@ -177,6 +190,7 @@ const PassportForm: FC = () => {
                 {passport_name && passport_name !== 'add' ? 'Сохранить изменения' : 'Добавить паспорт'}
             </Button>
         </Form>
+        </div>
     );
 };
 
