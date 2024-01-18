@@ -1,34 +1,28 @@
 import { FC, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
-import { Col, Row, Table, Button } from "react-bootstrap";
+import { Table, Button } from "react-bootstrap";
 //import BorderCrossFactReqCard from '../components/BorderCrossFactReqCard/BorderCrossFactReqCard'
-import store, { useAppDispatch } from '../../store/store'
+import store from '../../store/store'
 import getRequestByStatus from '../../modules/get-req-by-status';
 import { BorderCrossingFactRequest } from '../../modules/ds'
-import filtersSlice from '../../store/filtersSlice';
-import RequestFilter from '../../components/RequestFilter/RequestFilter';
 import "../../styles/RequestsAllPage.styles.css";
 import Pagination from '../../components/Pagination/Pagination';
-import { useFetcher, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { getDistinctClients } from '../../modules/get-distinct-client';
 import { getAsyncProcessed } from "../../modules/get-assync-process";
 
 const TransfReq: FC = () => {
     const { userToken, userRole, userName } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
     const {
-        requestStatus,
         reqStartDate,
         reqFinDate,
-        reqClient } = useSelector((state: ReturnType<typeof store.getState>) => state.filters);
+         } = useSelector((state: ReturnType<typeof store.getState>) => state.filters);
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
+
     const [transfReqs, setTransfReqs] = useState<BorderCrossingFactRequest[]>([]);
-    const [startDate, setStartDate] = useState(reqStartDate);
-    const [finDate, setFinDate] = useState(reqFinDate);
-    const [status, setStatus] = useState(requestStatus);
+    
     const [currentPage, setCurrentPage] = useState(1);
-    const [client, setClient] = useState(reqClient);
-    const [allClients, setAllClients] = useState<string[]>([]);
+    const [ ,setAllClients] = useState<string[]>([]);
     const [asyncProcessedAmount, setAsyncProcessedAmount] = useState<number | null>(null);
 
     const fetchAsyncProcessedAmount = async () => {
@@ -74,55 +68,9 @@ const TransfReq: FC = () => {
         return () => clearInterval(intervalId);
     }, [userToken, userRole, userName, status, reqStartDate, reqFinDate]);
 
-    const applyFilters = async () => {
-        try {
-            if (status === '') {
-                setStatus('client');
-            }
-            dispatch(filtersSlice.actions.setReqStartDate(startDate));
-            dispatch(filtersSlice.actions.setReqFinDate(finDate));
-            dispatch(filtersSlice.actions.setRequestStatus(status));
-            dispatch(filtersSlice.actions.setReqClient(client));
+    
 
-            if (status !== undefined && status !== null) {
-                const result = await getRequestByStatus(userToken?.toString(),
-                    userRole, userName, status, startDate, finDate, /*reqClient*/);
-                if (result) {
-                    //фильтр по клиенту => убрать фильтр по клиенту с бэка (не используется)
-                    const filteredRequests = result.filter(
-                        (request) => request.Client && request.Client.Name === client
-                    );
-                    setTransfReqs(filteredRequests);
-                    navigate('/border_crossing_facts', { state: { result } });
-                }
-            }
-        } catch (error) {
-            console.error("Ошибка при получении заявок:", error);
-        }
-    };
-
-    const clearFilters = async () => {
-        setStatus('');
-        setStartDate('');
-        setFinDate('');
-        setClient('');
-
-        dispatch(filtersSlice.actions.setRequestStatus(''));
-        dispatch(filtersSlice.actions.setReqStartDate(''));
-        dispatch(filtersSlice.actions.setReqFinDate(''));
-        dispatch(filtersSlice.actions.setReqClient(''));
-
-        try {
-            const result = await getRequestByStatus(userToken?.toString(),
-                userRole, userName, 'client', '', '', /*''*/);
-            if (result) {
-                setTransfReqs(result);
-            }
-        } catch (error) {
-            console.error("Ошибка:", error);
-        }
-
-    };
+    
 
     const formatDate = (dateString: string | undefined) => {
         if (!dateString) {
@@ -178,19 +126,6 @@ const TransfReq: FC = () => {
             )}
             {userToken && (
                 <>
-                     <RequestFilter
-                        status={status}
-                        setStatus={setStatus}
-                        reqStartDate={startDate}
-                        setReqStartDate={setStartDate}
-                        reqFinDate={finDate}
-                        setReqFinDate={setFinDate}
-                        reqClient={client}
-                        setReqClient={setClient}
-                        allClients={allClients}
-                        applyFilters={applyFilters}
-                        clearFilters={clearFilters}>
-                    </RequestFilter>
                     {transfReqs.length === 0 && <h3 style={{ textAlign: 'center', marginTop: '20px' }}> Заявки не найдены</h3>}
 
                     {userToken && userRole === '2' &&

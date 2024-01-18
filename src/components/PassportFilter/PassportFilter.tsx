@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Row, Col, FormControl, FormLabel, FormCheck, Button } from 'react-bootstrap';
+import { Form, Row, Col, FormControl, FormCheck, Button } from 'react-bootstrap';
 import './PassportFilter.styles.css';
 
 

@@ -7,11 +7,7 @@ import store, { useAppDispatch } from "../store/store";
 import { deletePassportTransfer } from "../modules/delete-req-mm";
 import "../styles/CartPage.styles.css"
 import { changeReqStatus } from "../modules/change-req-status";
-import { DropResult } from "react-beautiful-dnd";
 
-interface InputChangeInterface {
-    target: HTMLInputElement;
-}
 
 const Cart: FC = () => {
     const [showSuccess, setShowSuccess] = useState(false);

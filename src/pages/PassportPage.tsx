@@ -5,9 +5,7 @@ import { getPassportByName } from '../modules/get-passport-by-name'
 import { Passport } from '../modules/ds'
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import store from '../store/store';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
 
 

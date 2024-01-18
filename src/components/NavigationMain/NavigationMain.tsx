@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import  { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Nav, Navbar } from 'react-bootstrap';
@@ -9,7 +9,7 @@ import './NavigationMain.styles.css';
 import CartButton from '../CartButton/CartButton';
 
 const NavigationMain: FC = () => {
-    const { userToken, userRole, userName } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
+    const { userToken, userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 

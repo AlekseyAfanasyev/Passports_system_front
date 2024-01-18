@@ -1,15 +1,12 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
-import { Button, Col, Form, FormGroup, ListGroup, ListGroupItem, Modal, Row, Table } from "react-bootstrap";
-import Select from 'react-select';
+import { Button, Col, Form, FormGroup, Modal, Row, Table } from "react-bootstrap";
 import { getDetailedReq } from '../modules/get-detailed-request';
 import { getRequestPassports } from "../modules/get-request-passports";
-import { setRequestPassports } from "../modules/set-request-passports";
 import { changeReqStatus } from "../modules/change-req-status";
 import { BorderCrossingFactRequest } from "../modules/ds";
-import store, { useAppDispatch } from '../store/store';
+import store from '../store/store';
 import { Passport } from '../modules/ds';
-import { getAllPassports } from "../modules/get-all-passports";
 import "../styles/BorderCrossFactDetPage.styles.css";
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +20,6 @@ const BorderCrossFactDetPage: FC = () => {
     const [showError, setShowError] = useState(false);
     const { userToken, userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
     
-    const [reqId, setReqId] = useState(0);
     const [req, setReq] = useState<BorderCrossingFactRequest | undefined>();
 
     const [status, setStatus] = useState<string | undefined>();

@@ -1,8 +1,7 @@
-import React from 'react'
+
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter} from 'react-router-dom'
 import { Routes, Route } from 'react-router-dom';
-import { createBrowserRouter, RouterProvider} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Breadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 import NavigationMain from './components/NavigationMain/NavigationMain';
@@ -28,12 +27,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <NavigationMain />
         <Breadcrumbs />
         <Routes>
-          <Route path="/passports" Component={PassportsPage} />
-          <Route path="/passports/:passport_name" Component={PassportPage} />
+          <Route path="/Passports_system_front" Component={PassportsPage} />
+          <Route path="/Passports_system_front/:passport_name" Component={PassportPage} />
           <Route path="/border_crossing_facts" Component={TransfReq} />
           <Route path="/border_crossing_facts/:req_id" Component={BorderCrossFactDetPage} />
-          <Route path="/passports/:passport_name/edit" element={<PassportForm />} />
-          <Route path="/passports/add_new_passport" element={<PassportForm />} />
+          <Route path="/Passports_system_front/:passport_name/edit" element={<PassportForm />} />
+          <Route path="/Passports_system_front/add_new_passport" element={<PassportForm />} />
           <Route path="/cart" Component={Cart} />
           <Route path="/profile" Component={Profile} />
           <Route path="/login" Component={LoginPage} />

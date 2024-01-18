@@ -14,7 +14,6 @@ const PassportForm: FC = () => {
     const navigate = useNavigate();
     const { passport_name } = useParams();
     const [passport, setPassport] = useState<Passport | null>(null);
-    const [passportAdd, setPassportAdd] = useState<string | null>();
     const [imageFile, setImageFile] = useState<File | null>(null);
     const { userToken } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
 

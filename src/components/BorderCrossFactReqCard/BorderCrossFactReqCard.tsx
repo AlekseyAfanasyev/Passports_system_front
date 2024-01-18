@@ -14,7 +14,7 @@ interface borderCrossFactProps {
 }
 
 const borderCrossFactCard: FC<borderCrossFactProps> = ({ status, dateCreated, dateProcessed, dateFinished, id }) => {
-    const { userRole, userName } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
+    const { userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
     const navigate = useNavigate()
 
     const formatDate = (dateString: string | undefined) => {

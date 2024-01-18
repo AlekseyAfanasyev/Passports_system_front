@@ -2,12 +2,12 @@ import {FC, useEffect, useState} from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import {Button, Spinner, Modal} from 'react-bootstrap'
+import { Spinner} from 'react-bootstrap'
 
 import '../styles/LoginPage.styles.css';
 
 import store, { useAppDispatch } from '../store/store'
-import { loginUser, registerUser } from '../modules/auth-actions';
+import { loginUser } from '../modules/auth-actions';
 
 interface InputChangeInterface {
     target: HTMLInputElement;
@@ -16,7 +16,7 @@ interface InputChangeInterface {
 
 const LoginPage: FC = () => {
 
-    const {loading, error, success} = useSelector(
+    const {loading, success} = useSelector(
         (state: ReturnType<typeof store.getState> ) => state.auth
     )
 
@@ -26,7 +26,7 @@ const LoginPage: FC = () => {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
-    const [showRegisterModal, setShowRegisterModal] = useState(true)
+    const [showRegisterModal] = useState(true)
 
    
 

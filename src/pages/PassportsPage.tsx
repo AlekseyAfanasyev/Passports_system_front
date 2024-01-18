@@ -7,7 +7,6 @@ import { getAllPassports } from '../modules/get-all-passports';
 import store, { useAppDispatch } from '../store/store';
 import cartSlice from '../store/cartSlice';
 import PassportCard from '../components/PassportCard/PassportCard';
-import SearchForm from '../components/SearchForm/SearchForm';
 import PassportTable from '../components/PassportTable/PassportTable';
 import { changePassportStatus } from '../modules/change-passport-status';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +21,6 @@ import { BsGrid, BsTable } from 'react-icons/bs';
 
 const PassportsPage: FC = () => {
     const [passports, setPassports] = useState<Passport[]>([]);
-    const [searchText, setSearchText] = useState<string>('');
     const dispatch = useAppDispatch()
     const navigate= useNavigate()
     const { userToken, userRole, userName } = useSelector((state: ReturnType<typeof store.getState>) => state.auth)
