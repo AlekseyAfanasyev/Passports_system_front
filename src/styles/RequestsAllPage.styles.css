@@ -1,0 +1,18 @@
+.custom-table {
+    max-width: 90%;
+    border-radius: 10px;
+    margin: 10px auto;
+}
+
+.custom-table th,
+.custom-table td {
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 8px;
+}
+.custom-table button {
+    padding: 5px 10px;
+    border-radius: 5px;
+}

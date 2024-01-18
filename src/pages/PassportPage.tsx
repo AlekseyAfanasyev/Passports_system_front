@@ -10,6 +10,7 @@ import store from '../store/store';
 import { Row, Col, Button } from 'react-bootstrap';
 
 
+
 const PassportPage: FC = () => {
     const [passport, setPassport] = useState<Passport | null>(null);
     const [error, setError] = useState<string | null>(null);

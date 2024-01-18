@@ -29,7 +29,7 @@ const Profile: FC = () => {
                     <h1> Аккаунт </h1>
                     {userRole == '1' && <p>Клиент</p> }
                     {userRole == '2' && <p>Модератор</p> }
-                    <p>Имя пользователя: {userName}</p>
+                    <p>{userName}</p>
                     <button onClick={handleLogout}> Выйти из системы </button>
                 </>
             }

@@ -27,7 +27,6 @@ const filtersSlice = createSlice({
         },
         
         setPassportName(state, {payload}) {
-            console.log('setPassportName got passportName: ' + payload)
             state.passportName = payload
             localStorage.setItem('passportName', payload)
         },

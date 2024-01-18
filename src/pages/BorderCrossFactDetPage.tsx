@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useState, useRef } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
-import { Form, FormGroup, Button, ListGroup, ListGroupItem, Modal } from "react-bootstrap";
+import { Button, Col, Form, FormGroup, ListGroup, ListGroupItem, Modal, Row } from "react-bootstrap";
 import Select from 'react-select';
 import { getDetailedReq } from '../modules/get-detailed-request';
 import { getRequestPassports } from "../modules/get-request-passports";
@@ -11,37 +11,36 @@ import store, { useAppDispatch } from '../store/store';
 import { Passport } from '../modules/ds';
 import { getAllPassports } from "../modules/get-all-passports";
 import "../styles/BorderCrossFactDetPage.styles.css";
-import cartSlice from "../store/cartSlice";
 import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const BorderCrossFactDetPage: FC = () => {
 
-    const [passportNames, setPassportNames] = useState<string[]>();
     const [passports, setPassports] = useState<Passport[]>();
-    const [showSuccess, setShowSuccess] = useState(false);
+    
     const [showError, setShowError] = useState(false);
     const { userToken, userRole } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
     
     const [reqId, setReqId] = useState(0);
     const [req, setReq] = useState<BorderCrossingFactRequest | undefined>();
 
-    const [options, setOptions] = useState<Passport[]>([]);
+    const [status, setStatus] = useState<string | undefined>();
     
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate()
 
     useEffect(() => {
         const pathname = window.location.pathname;
         const parts = pathname.split('/');
         const reqIdString = parts[parts.length - 1];
-        if (reqIdString) {
-            setReqId(+reqIdString);
-        }
+        
         const loadReq = async () => {
             try {
                 const loadedReq = await getDetailedReq(userToken?.toString(), String(reqIdString));
                 setError(null);
                 setReq(loadedReq);
+                setStatus(loadedReq?.Status)
             } catch (error) {
                 if ((error as AxiosError).message === '403') {
                     setError("403 Доступ запрещен");
@@ -53,27 +52,13 @@ const BorderCrossFactDetPage: FC = () => {
                 return;
             }
 
-            const passports = await getRequestPassports(+reqIdString, userToken);
-            var passportNames: string[] = [];
-            if (passports) {
-                for (let passport of passports) {
-                    passportNames.push(passport.Name);
-                }
-                
-                setPassportNames(passportNames)
-                if (req?.Status == 'Черновик') {
-                    localStorage.setItem("passports", passportNames.join(","));
-                }
-            }
-        };
-        const fetchPassports = async () => {
-            const passports = await getAllPassports();
-            setOptions(passports);
+            const reqID: number = reqIdString ? parseInt(reqIdString, 10) : 0;
+            const requestPassports = await getRequestPassports(reqID, userToken);
+            setPassports(requestPassports);
         };
 
         loadReq();
-        fetchPassports();
-    }, [userToken]);
+    }, []);
 
     if (error) {
         return (
@@ -88,45 +73,21 @@ const BorderCrossFactDetPage: FC = () => {
     const handleErrorClose = () => {
         setShowError(false);
     };
-    const handleSuccessClose = () => {
-        setShowSuccess(false);
-        if (req?.Status != 'Черновик') {
-            window.location.href = '/passports';
-        }
-    };
+   
     const sendChanges = async (status: string) => {
-        if (!userToken) {
+        if (!userToken || req?.ID === undefined) {
+            console.log("Ошибка токена или ID");
             return;
         }
-        var req_id = 0;
-        if (req?.ID !== undefined) {
-            req_id = req?.ID;
-        }
-        const editResult = await changeReqStatus(userToken, {
-            ID: req_id,
-            Status: status,
-        });
-       
+        try {
+            const editResult = await changeReqStatus(userToken, {
+                ID: req.ID,
+                Status: status,
+            });
 
-        if (!passportNames || !userToken) {
-            return;
-        }
-        if (status !== 'Удалена') {
-            const passportsResult = await setRequestPassports(req?.ID, passportNames, userToken);
-            if (passportsResult.status === 201) {
-                setShowSuccess(true);
-            } else {
-                setShowError(true);
-            }
-            console.log(passportsResult);
-            
-            if (status != 'Черновик') {
-                localStorage.setItem("passports", '')
-                window.location.href = '/passports';
-            }
-        } else {
-            localStorage.setItem("passports", '')
-            setPassportNames([]);
+            setStatus(status);
+        } catch (error) {
+            setShowError(true);
         }
     };
     return (
@@ -141,55 +102,65 @@ const BorderCrossFactDetPage: FC = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <Modal show={showSuccess} onHide={handleSuccessClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Обновление заявки прошло успешно!</Modal.Title>
-                </Modal.Header>
-                <Modal.Footer>
-                    <Button variant="success" onClick={handleSuccessClose}>
-                        Закрыть
-                    </Button>
-                </Modal.Footer>
-            </Modal>
             <h1>Заявка #{req?.ID}</h1>
-            <p>Статус: {req?.Status}</p>
-            <h4>Паспорта:</h4>
-            <ListGroup className="list-group" style={{ width: '300px' }}>
-                {passports?.map((passport) => (
-                    <ListGroupItem key={passport.ID} className="list-group-item">
-                        {passport.Name}
-                        {passport.Image && (
-                            <img
-                                src={passport.Image}
-                                alt={`Image for ${passport.Name}`}
-                                style={{ width: '75px', height: '75px', position: 'absolute', right: '0' }}
-                            />
-                        )}
-                        <div style={{ width: '75px', height: '75px' }}></div>
-                    </ListGroupItem>
-                ))}
-            </ListGroup>
+            <p>Статус: {status}</p>
+            {status !== 'Отклонена' && (<>
+                <h4>Паспорта:</h4>
+                <ListGroup className="list-group" style={{ width: '300px' }}>
+                    {passports?.map((passport) => (
+                        <ListGroupItem key={passport.ID} className="list-group-item">
+                            {passport.Name}
+                            {passport.Image && (
+                                <img
+                                    src={passport?.Image}
+                                    onError={(e) => { e.currentTarget.src = '/DEFAULT.jpg' }}
+                                    style={{ width: '75px', height: '75px', position: 'absolute', right: '0' }}
+                                />
+                            )}
+                            <div style={{ width: '75px', height: '75px' }}></div>
+                        </ListGroupItem>
+                    ))}
+                </ListGroup>
+            </>)}
             <Form>
                 <FormGroup className="form-group">
 
-                    {userRole === '2' && req?.Status === 'На рассмотрении' && (
+                    {userRole === '2' && status === 'На рассмотрении' && (
                         <>
                             <div>
-                                <Button className="common-button" variant="warning"
-                                    onClick={() => sendChanges('Отклонена')}>Отклонить</Button>
+                            <Button 
+                                className="common-button" 
+                                variant="warning" 
+                                onClick={() => sendChanges('Отклонена')}>
+                                    Отклонить
+                                </Button>
                             </div>
                             <div>
-                                <Button className="common-button" variant="success"
-                                    onClick={() => sendChanges('Оказана')}>Одобрить</Button>
+                            <Button 
+                                className="common-button" 
+                                variant="success" 
+                                onClick={() => sendChanges('Оказана')}>
+                                    Одобрить
+                                </Button>
                             </div>
                         </>
                     )}
                 </FormGroup>
             </Form>
-            <div className="button-container">
-                <Button href='/border_crossing_facts' className="button">К заявкам</Button>
-                <Button href='/passports' className="button">К паспортам</Button>
-            </div>
+            <Row>
+                <Col>
+                    <Button onClick={() => navigate('/border_crossing_facts')}
+                     className="button">
+                        К заявкам
+                    </Button>
+                </Col>
+                <Col>
+                    <Button onClick={() => navigate(`/passports/`)}
+                     className="button">
+                        К паспортам
+                    </Button>
+                </Col>
+            </Row>
         </div>
     );
 }

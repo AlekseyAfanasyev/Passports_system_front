@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -21,78 +22,53 @@ const NavigationMain: FC = () => {
         }
     };
     return (
-        <Navbar className="navbar" expand="lg">
-            <Navbar.Brand className="navbar-logo" href="/passports">
-                PASSPORT SYSTEM
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="navbar-nav" />
-            <Navbar.Collapse id="navbar-nav">
-                <Nav className="mr-auto">
-                <Nav.Link className="navbar-block" href="/passports">
-                        Список паспортов
-                    </Nav.Link>
-                </Nav>
-                <Nav>
-                    {!userToken && (
-                        <Nav.Link className="navbar-block" href="/auth">
-                            Вход
-                        </Nav.Link>
-                    )}
-                    {userToken && (
-                        <NavDropdown
-                            className="nav-dropdown"
-                            title={userName}
-                            id="basic-nav-dropdown"
-                            show={showDropdown}
-                            onMouseEnter={() => setShowDropdown(true)}
-                            onMouseLeave={() => setShowDropdown(false)}
-                            align={{ lg: 'end' }}
-                        >
-                            <NavDropdown.Item
-                                className="navbar-block"
-                                onClick={() => {
-                                    navigate('/profile');
-                                    setShowDropdown(false);
-                                }}
+        <Navbar expand="sm">
+            <NavLink className="logo" to="/passports" style={{ textDecoration: 'none' }}>PASSPORT SYSTEM</NavLink>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+                <span><NavLink to="/passports" className="nav-link">Список паспортов</NavLink></span>
+                {userToken && userRole === '1' && <CartButton/>}
+                <Nav className="ml-auto">
+                    {userToken &&
+                        <>
+                            <NavLink to="/border_crossing_facts" className="nav-link">Заявки</NavLink>
+                            <NavDropdown
+                                className="nav-dropdown"
+                                title={userName}
+                                id="basic-nav-dropdown"
+                                show={showDropdown}
+                                onMouseEnter={() => setShowDropdown(true)}
+                                onMouseLeave={() => setShowDropdown(false)}
+                                align={{ sm: 'end' }}
                             >
-                                Личный кабинет
-                            </NavDropdown.Item>
-                            {(userRole === '2' || userRole === '1') && (
                                 <NavDropdown.Item
                                     className="navbar-block"
                                     onClick={() => {
-                                        navigate('/border_crossing_facts');
+                                        navigate('/profile');
                                         setShowDropdown(false);
                                     }}
                                 >
-                                    Заявки
+                                    Личный кабинет
                                 </NavDropdown.Item>
-                            )}
-                            {userRole == '1' &&
                                 <NavDropdown.Item
                                     className="navbar-block"
                                     onClick={() => {
-                                        window.location.href = '/cart';
+                                        handleLogout();
                                         setShowDropdown(false);
                                     }}
                                 >
-                                    Корзина
+                                    Выйти
                                 </NavDropdown.Item>
-                            }
-                            <NavDropdown.Item
-                                className="navbar-block"
-                                onClick={() => {
-                                    handleLogout();
-                                    setShowDropdown(false);
-                                }}
-                            >
-                                Выйти
-                            </NavDropdown.Item>
-                        </NavDropdown>
-                    )}
+                            </NavDropdown>
+                        </>}
+                    {!userToken &&
+                        <>
+                            <NavLink to="/auth" className='nav-link'>Вход</NavLink>
+                        </>}
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
     );
 };
+
 export default NavigationMain;

@@ -8,12 +8,13 @@ import store, { useAppDispatch } from '../store/store';
 import cartSlice from '../store/cartSlice';
 import PassportCard from '../components/PassportCard/PassportCard';
 import SearchForm from '../components/SearchForm/SearchForm';
-import { getTransfReqs } from '../modules/get-all-requests';
-import { getRequestPassports } from '../modules/get-request-passports'
 import { useNavigate } from 'react-router-dom';
 import filtersSlice from "../store/filtersSlice";
 import PassportFilter from '../components/PassportFilter/PassportFilter';
 import loadTransfReq from '../modules/load-reqs';
+import { getRequestPassports } from '../modules/get-request-passports';
+import getRequestByStatus from '../modules/get-req-by-status';
+import CartButton from '../components/CartButton/CartButton';
 
 
 const PassportsPage: FC = () => {
@@ -34,18 +35,26 @@ const PassportsPage: FC = () => {
 
     useEffect(() => {
 
-      const fetchData = async () => {
-        const passportsData = await loadTransfReq(userToken?.toString(), userRole?.toString(), userName?.toString());
-        var passportNames: string[] = [];
-        if (passportsData) {
-          for (let passport of passportsData) {
-            passportNames.push(passport.Name);
-              }
-              dispatch(cartSlice.actions.setPassports(passportNames));
-            }
-          };
+      const loadDraftRequest = async () => {
+        const result = (await getRequestByStatus(userToken?.toString(), userRole, userName, 'Черновик'))
+        if (!result) {
+          return
+        }
 
-          fetchData();
+        if (result[0]?.ID) {
+          localStorage.setItem("reqID", result[0].ID.toString());
+          const passportsData = await getRequestPassports(result[0].ID, userToken?.toString());
+          var passportNames: string[] = [];
+          if (passportsData) {
+            for (let passport of passportsData) {
+              passportNames.push(passport.Name);
+            }
+            dispatch(cartSlice.actions.setPassports(passportNames));
+          }
+        };
+      }
+      loadDraftRequest()
+
          
         const loadPassports = async () => {
             try {
@@ -117,6 +126,7 @@ const PassportsPage: FC = () => {
           </button>
         </Modal.Footer>
       </Modal>
+      {userToken && userRole === '1' && <CartButton/>}
       <PassportFilter
         name={name}
         isGender={isGender}
@@ -132,7 +142,6 @@ const PassportsPage: FC = () => {
                         imageUrl={passport.Image}
                         passportName={passport.Name}
                         passportStatus={passport.IsFree}
-                        passportDetailed={`/passports/${passport.Name}`}
                         changeStatus={`/passports/change_status/${passport.Name}`}
                         onStatusChange={handleStatusChange}
                     />

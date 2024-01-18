@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { changePassportStatus } from '../../modules/change-passport-status';
@@ -14,12 +14,11 @@ interface Props {
     imageUrl: string;
     passportName: string;
     passportStatus: boolean;
-    passportDetailed: string;
     changeStatus: string;
     onStatusChange: (passportName: string, newStatus: boolean) => void;
 }
 
-const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passportDetailed, onStatusChange }) => {
+const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, onStatusChange }) => {
     const [isStatusChanging, setIsStatusChanging] = useState(false);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -81,7 +80,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, passp
                 <div className='card_title'>
                     <Card.Title> Статус: {passportStatus ? "Доступен" : "Недоступен"} </Card.Title>
                 </div>
-                <Button className='button' href={passportDetailed}> Подробнее </Button>
+                <Button className='button' onClick={() => (navigate(`/passports/${encodeURIComponent(passportName)}`))}> Подробнее </Button>
                 <div></div>
                 {userRole === '2' && (
                     <Button

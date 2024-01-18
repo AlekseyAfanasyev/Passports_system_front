@@ -15,10 +15,10 @@ import Profile from './pages/ProfilePage';
 import BorderCrossFact from './pages/BorderCrossFactPage';
 import BorderCrossFactDetPage from './pages/BorderCrossFactDetPage';
 import Cart from './pages/CartPage';
-
+import NotFoundPage from './NotFoundPage';
 import store from './store/store';
 import { Provider } from 'react-redux';
-
+import Footer from './components/Footer/Footer';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
      <Provider store={store}>
@@ -35,7 +35,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/cart" Component={Cart} />
           <Route path="/auth" Component={AuthPage} />
           <Route path="/profile" Component={Profile} />
+          <Route path="*" Component={NotFoundPage} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </Provider>
 )
