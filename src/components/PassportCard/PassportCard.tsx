@@ -41,7 +41,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, onSta
             console.error('Error changing passport status:', error);
         } finally {
             setIsStatusChanging(false);
-            navigate('/passports');
+            navigate('/Passports_system_front');
         }
     };
 
@@ -81,7 +81,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, onSta
                     <Card.Title style={{fontWeight: 'bold'}}> {passportName} </Card.Title>
                     <Card.Title> Статус: {passportStatus ? "Доступен" : "Недоступен"} </Card.Title>
                 </div>
-                <Button className='button' onClick={() => (navigate(`/passports/${encodeURIComponent(passportName)}`))}> Подробнее </Button>
+                <Button className='button' onClick={() => (navigate(`/Passports_system_front/${encodeURIComponent(passportName)}`))}> Подробнее </Button>
                 <div></div>
                 {userRole === '2' && (
                     <>
@@ -89,7 +89,7 @@ const PassportCard: FC<Props> = ({ imageUrl, passportName, passportStatus, onSta
                      <Button
                          className='button-card'
                          variant='success'
-                         onClick={() => navigate(`/passports/${encodeURIComponent(passportName)}/edit`)}
+                         onClick={() => navigate(`/Passports_system_front/${encodeURIComponent(passportName)}/edit`)}
                      >
                          Изменить
                      </Button>

@@ -186,7 +186,7 @@ const BorderCrossFactDetPage: FC = () => {
                     </Button>
                 </Col>
                 <Col>
-                    <Button onClick={() => navigate(`/passports/`)}
+                    <Button onClick={() => navigate(`/Passports_system_front/`)}
                      className="button">
                         К паспортам
                     </Button>

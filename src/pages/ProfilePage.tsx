@@ -15,7 +15,7 @@ const Profile: FC = () => {
     const handleLogout = async () => {
         if (userToken != null) {
             dispatch(logoutUser(userToken));
-            navigate('/passports/');
+            navigate('/Passports_system_front/');
         }
     }
 

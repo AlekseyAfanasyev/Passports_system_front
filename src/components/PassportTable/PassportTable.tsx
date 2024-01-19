@@ -49,7 +49,7 @@ const PassportTable: FC<PassportTableProps> = ({ passports, handleStatusChange, 
                 <Col>
                   <Button
                     className="passport-table-button"
-                    onClick={() => navigate(`/passports/${encodeURIComponent(passport.Name)}`)}
+                    onClick={() => navigate(`/Passports_system_front/${encodeURIComponent(passport.Name)}`)}
                   >
                     Подробнее
                   </Button>
@@ -59,7 +59,7 @@ const PassportTable: FC<PassportTableProps> = ({ passports, handleStatusChange, 
                     className="passport-table-button"
                     style={{ marginRight:'60px' }}
                     variant='success'
-                    onClick={() => navigate(`/passports/${encodeURIComponent(passport.Name)}/edit`)}
+                    onClick={() => navigate(`/Passports_system_front/${encodeURIComponent(passport.Name)}/edit`)}
                   >
                     Изменить
                   </Button>

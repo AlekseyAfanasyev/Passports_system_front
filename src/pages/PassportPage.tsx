@@ -76,7 +76,7 @@ const PassportPage: FC = () => {
                 </div>
                 <Row>
       <Col>
-      <button className="button-det" onClick={() => (navigate(`/passports/`))}>Назад</button>
+      <button className="button-det" onClick={() => (navigate(`/Passports_system_front/`))}>Назад</button>
       </Col>
       </Row>
         </div>

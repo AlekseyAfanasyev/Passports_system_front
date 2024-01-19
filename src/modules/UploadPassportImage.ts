@@ -9,7 +9,7 @@ export const uploadPassportImage = async (
     const formData = new FormData();
     formData.append('image', imageFile);
     formData.append('passportName', passportName || "");
-    const response = await axios.post<string>(`/api/passports/upload_image`, formData, {
+    const response = await axios.post<string>(`/api/Passports_system_front/upload_image`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${userToken}`,

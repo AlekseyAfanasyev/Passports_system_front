@@ -120,7 +120,7 @@ const Cart: FC = () => {
                     <Button variant="success" onClick={handleSuccessClose}>
                         Просмотр
                     </Button>
-                    <Button onClick={() => (navigate(`/passports`))} variant="primary" className="button">
+                    <Button onClick={() => (navigate(`/Passports_system_front`))} variant="primary" className="button">
                         К паспортам
                     </Button>
                 </Modal.Footer>
@@ -160,7 +160,7 @@ const Cart: FC = () => {
                 </Row>
                 </>
             )}
-            <button onClick={() => navigate("/passports")}>К паспортам</button>
+            <button onClick={() => navigate("/Passports_system_front")}>К паспортам</button>
         </div>
     );
 };

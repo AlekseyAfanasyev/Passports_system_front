@@ -86,7 +86,7 @@ const PassportsPage: FC = () => {
   
         setPassports(data);
   
-        navigate('/passports', { state: { data } });
+        navigate('/Passports_system_front', { state: { data } });
       } catch (error) {
         console.error("Ошибка при получении паспортов:", error);
       }
@@ -126,7 +126,7 @@ const PassportsPage: FC = () => {
         console.error('Error while changing passport status:', error);
       } finally {
         setIsStatusChanging(false);
-        navigate('/passports');
+        navigate('/Passports_system_front');
       }
     };
 
@@ -151,7 +151,7 @@ const PassportsPage: FC = () => {
       {userToken && userRole === '2' && (
         <>
         <Button 
-      onClick={() => (navigate(`/passports/add_new_passport`))} className='cart-button'> Новый паспорт </Button>
+      onClick={() => (navigate(`/Passports_system_front/add_new_passport`))} className='cart-button'> Новый паспорт </Button>
       <div className='toggle-view-icon' onClick={toggleViewMode}>
             <ToggleIcon style={{ position: 'absolute', left: '20px', marginTop: '100px' }} size={40} />
           </div>
@@ -178,7 +178,7 @@ const PassportsPage: FC = () => {
                         imageUrl={passport.Image}
                         passportName={passport.Name}
                         passportStatus={passport.IsFree}
-                        changeStatus={`/passports/change_status/${passport.Name}`}
+                        changeStatus={`/Passports_system_front/change_status/${passport.Name}`}
                         onStatusChange={handleStatusChange}
                         />
                         </div>

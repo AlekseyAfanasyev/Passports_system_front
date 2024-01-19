@@ -16,16 +16,16 @@ const NavigationMain: FC = () => {
     const handleLogout = () => {
         if (userToken) {
             dispatch(logoutUser(userToken));
-            navigate('/passports');
+            navigate('/Passports_system_front');
         }
     };
 
     return (
         <Navbar expand="sm">
-            <NavLink className="logo" to="/passports" style={{ textDecoration: 'none' }}>PASSPORT SYSTEM</NavLink>
+            <NavLink className="logo" to="/Passports_system_front" style={{ textDecoration: 'none' }}>PASSPORT SYSTEM</NavLink>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-                <span><NavLink to="/passports" className="nav-link">Список паспортов</NavLink></span>
+                <span><NavLink to="/Passports_system_front" className="nav-link">Список паспортов</NavLink></span>
                 {userToken && userRole === '1' && <CartButton/>}
                 <Nav className="ml-auto">
                     {userToken &&

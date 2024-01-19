@@ -52,7 +52,7 @@ const LoginPage: FC = () => {
         sendLogin()
       }
       if (success && !showRegisterModal) {
-        navigate('/passports');
+        navigate('/Passports_system_front');
         window.location.reload()
       }
     }, [showRegisterModal, success])

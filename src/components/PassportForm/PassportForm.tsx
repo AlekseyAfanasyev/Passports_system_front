@@ -81,13 +81,13 @@ const PassportForm: FC = () => {
                     console.log("passport image edit: ", passport?.Image);
                     const updatedPassport = await editPassport(userToken?.toString(), passport);
                     setPassport(updatedPassport);
-                    navigate(`/passports/${updatedPassport.Name}/edit`);
+                    navigate(`/Passports_system_front/${updatedPassport.Name}/edit`);
                 } else {
                     console.log("passport image add: ", passport?.Image);
                     const newPassport = await addNewPassport(userToken?.toString(), passport);
                     setPassport(newPassport);
                     localStorage.setItem("flag", "edit")
-                    navigate(`/passports/${newPassport.Name}/edit`);
+                    navigate(`/Passports_system_front/${newPassport.Name}/edit`);
                 }
                 await handleImageUpload();
             }

@@ -10,7 +10,7 @@ export const addNewPassport = async (userToken = '', passport: Passport): Promis
   }
   console.log(passport)
   return axios.post(
-    `/api/passports/add_new_passport`,
+    `/api/Passports_system_front/add_new_passport`,
     {
         Name: passport.Name,
         Seria: passport.Seria,
