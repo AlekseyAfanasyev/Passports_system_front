@@ -8,6 +8,8 @@ import { deletePassportTransfer } from "../modules/delete-req-mm";
 import "../styles/CartPage.styles.css"
 import { changeReqStatus } from "../modules/change-req-status";
 import { DropResult } from "react-beautiful-dnd";
+import { changeReqStatusClient } from "../modules/changeRequestStatusClient";
+import { deleteBRequest } from "../modules/deleteRequest";
 
 interface InputChangeInterface {
     target: HTMLInputElement;
@@ -55,10 +57,12 @@ const Cart: FC = () => {
         const reqIDString: string | null = localStorage.getItem("reqID");
         const reqID: number = reqIDString ? parseInt(reqIDString, 10) : 0;
 
-        await changeReqStatus(userToken, {
-            ID: reqID,
-            Status: "На рассмотрении",
-        });
+        await changeReqStatusClient(userToken, reqID)
+
+        // await changeReqStatus(userToken, {
+        //     ID: reqID,
+        //     Status: "На рассмотрении",
+        // });
 
         localStorage.setItem("reqID", "")
 
@@ -82,10 +86,12 @@ const Cart: FC = () => {
         const reqIDString: string | null = localStorage.getItem("reqID");
         const reqID: number = reqIDString ? parseInt(reqIDString, 10) : 0;
 
-        await changeReqStatus(userToken, {
-            ID: reqID,
-            Status: "Удалена",
-        });
+        await deleteBRequest(userToken, reqID)
+
+        // await changeReqStatus(userToken, {
+        //     ID: reqID,
+        //     Status: "Удалена",
+        // });
 
         if (passports) {
             passports.forEach((passportName: string) => {

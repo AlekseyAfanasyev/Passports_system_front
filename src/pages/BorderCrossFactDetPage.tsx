@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { getExtractionData } from "../modules/get-biometry-data";
 import cartSlice from '../store/cartSlice';
 import Cart from './CartPage';
+import { changeReqStatusModer } from '../modules/changeRequestStatusModer';
 
 
 const BorderCrossFactDetPage: FC = () => {
@@ -92,7 +93,7 @@ const BorderCrossFactDetPage: FC = () => {
             return;
         }
         try {
-            await changeReqStatus(userToken, {
+            await changeReqStatusModer(userToken, {
                 ID: req.ID,
                 Status: status,
             });
