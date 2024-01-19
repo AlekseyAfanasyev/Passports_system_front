@@ -1,0 +1,48 @@
+.table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  table {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  td a {
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
+    font-size: 25px;
+    display: block;
+  }
+  
+  td a:hover {
+    text-decoration: underline;
+  }
+  
+
+.table-cell-link {
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
+    display: block;
+    padding: 10px;
+  }
+  
+  .table-cell-link:hover {
+    text-decoration: underline;
+  }
+  
+  

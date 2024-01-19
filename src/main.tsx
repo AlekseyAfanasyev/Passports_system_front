@@ -21,6 +21,7 @@ import NotFoundPage from './NotFoundPage';
 import store from './store/store';
 import { Provider } from 'react-redux';
 import Footer from './components/Footer/Footer';
+import HomePage from './pages/MenuPage/MenuPage';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
      <Provider store={store}>
@@ -34,6 +35,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/border_crossing_facts/:req_id" Component={BorderCrossFactDetPage} />
           <Route path="/passports/:passport_name/edit" element={<PassportForm />} />
           <Route path="/passports/add_new_passport" element={<PassportForm />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/profile" Component={Profile} />
           <Route path="/login" Component={LoginPage} />
           <Route path="/register" Component={Register} />
