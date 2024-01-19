@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button, ListGroup, ListGroupItem, Modal, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import {useSelector } from "react-redux/es/hooks/useSelector";
@@ -24,6 +24,10 @@ const Cart: FC = () => {
     const { userToken } = useSelector((state: ReturnType<typeof store.getState>) => state.auth);
     const passports = useSelector((state: ReturnType<typeof store.getState>) => state.cart.passports);
 
+
+    useEffect(() => {
+        dispatch(cartSlice.actions.setIsInCart(true));
+    }, [dispatch, userToken]);
 
     const deleteFromCart = (passportName = '') => {
         if (!userToken) {
@@ -65,6 +69,7 @@ const Cart: FC = () => {
 
             localStorage.setItem("reqID", "")
         }
+        dispatch(cartSlice.actions.setIsInCart(false))
         setRedirectUrl(`/border_crossing_facts/${reqID}`)
         setShowSuccess(true)
     };
@@ -89,6 +94,7 @@ const Cart: FC = () => {
 
             localStorage.setItem("reqID", "")
         }
+        dispatch(cartSlice.actions.setIsInCart(false))
     };
 
     const handleErrorClose = () => {
@@ -98,6 +104,7 @@ const Cart: FC = () => {
         setShowSuccess(false);
 
         if (redirectUrl) {
+            dispatch(cartSlice.actions.setIsInCart(false))
             navigate(redirectUrl);
             setRedirectUrl(null);
         }

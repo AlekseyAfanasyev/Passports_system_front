@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface CartState {
     passports: string[];
     added: boolean;
+    isInCart: boolean;
   }
 
   const initialState: CartState = {
@@ -10,6 +11,7 @@ interface CartState {
       ? localStorage.getItem('passports')?.split(',')|| []
       : [],
     added: false,
+    isInCart: true,
   };
 
   const cartSlice = createSlice({
@@ -38,6 +40,9 @@ interface CartState {
         state.passports = Array.from(new Set([...state.passports, ...payload]));
         localStorage.setItem('passports', state.passports.toString());
       },
+      setIsInCart(state, { payload }: PayloadAction<boolean>) {
+        state.isInCart = payload;
+      }
     },
   });
   export default cartSlice;

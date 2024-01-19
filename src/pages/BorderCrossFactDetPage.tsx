@@ -14,6 +14,8 @@ import "../styles/BorderCrossFactDetPage.styles.css";
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getExtractionData } from "../modules/get-biometry-data";
+import cartSlice from '../store/cartSlice';
+import Cart from './CartPage';
 
 
 const BorderCrossFactDetPage: FC = () => {
@@ -31,6 +33,8 @@ const BorderCrossFactDetPage: FC = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate()
     const [extractions, setExtraction] = useState<number[][] | undefined>()
+    const isInCart = useSelector((state: ReturnType<typeof store.getState>) => state.cart.isInCart);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         const pathname = window.location.pathname;
@@ -43,6 +47,9 @@ const BorderCrossFactDetPage: FC = () => {
                 setError(null);
                 setReq(loadedReq);
                 setStatus(loadedReq?.Status)
+                if (loadedReq?.Status !== 'Черновик') {
+                    dispatch(cartSlice.actions.setIsInCart(false));
+                }
             } catch (error) {
                 if ((error as AxiosError).message === '403') {
                     setError("403 Доступ запрещен");
@@ -63,7 +70,7 @@ const BorderCrossFactDetPage: FC = () => {
         };
 
         loadReq();
-    }, []);
+    }, [isInCart]);
 
     if (error) {
         return (
@@ -97,6 +104,10 @@ const BorderCrossFactDetPage: FC = () => {
     };
     return (
         <div className="container">
+            {status === 'Черновик' || isInCart ? (
+                <Cart />
+            ) : (
+                <>
             <Modal show={showError} onHide={handleErrorClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Произошла ошибка, заявка не была обновлена</Modal.Title>
@@ -138,10 +149,10 @@ const BorderCrossFactDetPage: FC = () => {
                                         <img
                                             src={passport?.Image}
                                             onError={(e) => { e.currentTarget.src = '/DEFAULT.jpg' }}
-                                            style={{ width: '70%',
-                                            height: '120%',
+                                            style={{ width: '50%',
+                                            height: '95%',
                                             position: 'absolute',
-                                            top: '50%',
+                                            top: '40%',
                                             left: '50%',
                                             transform: 'translate(-50%, -50%)' }}
                                         />
@@ -196,7 +207,9 @@ const BorderCrossFactDetPage: FC = () => {
                     </Button>
                 </Col>
             </Row>
+            </>
+            )}
         </div>
     );
-}
+};
 export default BorderCrossFactDetPage;

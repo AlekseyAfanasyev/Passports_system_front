@@ -13,7 +13,7 @@ const CartButton: FC = () => {
     <Button 
       className={"cart-button"} 
       disabled={passports?.length === 0}
-      onClick={() => (navigate(`/cart`))}>
+      onClick={() => (navigate(`/border_crossing_facts/${localStorage.getItem('reqID')}`))}>
       Корзина ({passports?.length || 0})
     </Button>
   );

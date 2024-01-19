@@ -34,7 +34,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/border_crossing_facts/:req_id" Component={BorderCrossFactDetPage} />
           <Route path="/passports/:passport_name/edit" element={<PassportForm />} />
           <Route path="/passports/add_new_passport" element={<PassportForm />} />
-          <Route path="/cart" Component={Cart} />
           <Route path="/profile" Component={Profile} />
           <Route path="/login" Component={LoginPage} />
           <Route path="/register" Component={Register} />

@@ -13,7 +13,7 @@ export const editPassport = async (userToken = '', passport: Passport): Promise<
 
   try {
     const response = await axios.put(
-      `/api/passports/${encodeURIComponent(Seria)}/edit`,
+      `/api/passports/${encodeURIComponent(Name)}/edit`,
       {
         ID,
         Name,
